@@ -1,0 +1,4 @@
+3C94, 20 test windows, tau = [1.6   5.927] samples (last window)
+2-fold: u at 16 MHz, interpolated: median 0.03 %   u on the fine grid: median 0.47 %
+4-fold: u at 16 MHz, interpolated: median 0.04 %   u on the fine grid: median 1.54 %
+8-fold: u at 16 MHz, interpolated: median 0.05 %   u on the fine grid: median 3.79 %

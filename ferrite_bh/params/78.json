@@ -1,0 +1,235 @@
+{
+ "material": "78",
+ "model": "32-parameter B-H model (Kirchgaessner 2026), final model, trained on MagNet Challenge 2 data",
+ "source": "models/nere.pt, variant final_e1",
+ "sample_period_s": 6.25e-08,
+ "units": {
+  "B": "T",
+  "H": "A/m",
+  "T": "degC",
+  "time": "samples of 62.5 ns"
+ },
+ "validity": {
+  "temperatures_degC": [
+   25.0,
+   50.0,
+   70.0
+  ],
+  "B_peak_max_T": 0.511,
+  "note": "trained on the MC2 measurements of this material (B_peak_max_T: largest |B| in its test windows); temperature dependence at most linear in t = (T - 50)/25"
+ },
+ "test_errors_percent": {
+  "sre_mean": 6.25,
+  "sre_p95": 16.51,
+  "sre_k100": 7.88,
+  "sre_k500": 5.86,
+  "sre_k900": 5.01,
+  "nere_mean": 1.07
+ },
+ "parameters": {
+  "tau1_0": {
+   "value": 1.7777208089828491,
+   "description": "measurement correction, coefficient of dB/dn at 50 degC",
+   "unit": "samples"
+  },
+  "tau1_1": {
+   "value": 0.16437458992004395,
+   "description": "measurement correction, slope of tau1 in t = (T - 50)/25",
+   "unit": "samples"
+  },
+  "tau2_0": {
+   "value": 7.7895636558532715,
+   "description": "measurement correction, coefficient of d2B/dn2 at 50 degC",
+   "unit": "samples^2"
+  },
+  "tau2_1": {
+   "value": 0.9567242860794067,
+   "description": "measurement correction, slope of tau2 in t",
+   "unit": "samples^2"
+  },
+  "a1_0": {
+   "value": 166.5452423095703,
+   "description": "initial slope of the reversible curve at 50 degC",
+   "unit": "A/m/T"
+  },
+  "a1_1": {
+   "value": -10.858201026916504,
+   "description": "slope of a1 in t",
+   "unit": "A/m/T"
+  },
+  "a3_0": {
+   "value": 1.2553589344024658,
+   "description": "cubic coefficient / 100 at 50 degC",
+   "unit": "100 A/m/T^3"
+  },
+  "a3_1": {
+   "value": 2.0961434841156006,
+   "description": "slope of a3 / 100 in t",
+   "unit": "100 A/m/T^3"
+  },
+  "Bs_0": {
+   "value": 0.22998829185962677,
+   "description": "knee position at 50 degC (floored at 0.15 T)",
+   "unit": "T"
+  },
+  "Bs_1": {
+   "value": 0.08296532183885574,
+   "description": "slope of Bs in t",
+   "unit": "T"
+  },
+  "log_bw": {
+   "value": -2.2441511154174805,
+   "description": "log of the knee width b",
+   "unit": "log T"
+  },
+  "log_r_first": {
+   "value": -3.2742233276367188,
+   "description": "log width of the narrowest play at 50 degC (widths log-equidistant)",
+   "unit": "log T"
+  },
+  "log_r_last": {
+   "value": -0.8203622698783875,
+   "description": "log width of the widest play at 50 degC",
+   "unit": "log T"
+  },
+  "rT": {
+   "value": -0.22437338531017303,
+   "description": "slope of all log widths in t",
+   "unit": "-"
+  },
+  "alpha_0": {
+   "value": -2.7030670642852783,
+   "description": "logit of the play rate alpha at 50 degC",
+   "unit": "-"
+  },
+  "alpha_1": {
+   "value": -0.3584197759628296,
+   "description": "slope of logit alpha in t",
+   "unit": "-"
+  },
+  "dw0_0": {
+   "value": -9.307475090026855,
+   "description": "play weight density at the mean log width, 50 degC (before w <= 0)",
+   "unit": "A/m/T"
+  },
+  "dw0_1": {
+   "value": 2.315012216567993,
+   "description": "slope of dw0 in t",
+   "unit": "A/m/T"
+  },
+  "dw1_0": {
+   "value": -3.787501096725464,
+   "description": "slope of the weight density over the standardized log width",
+   "unit": "A/m/T"
+  },
+  "dw1_1": {
+   "value": -0.47713956236839294,
+   "description": "slope of dw1 in t",
+   "unit": "A/m/T"
+  },
+  "beta_1": {
+   "value": -3.3305280208587646,
+   "description": "logit of relaxation rate 1 (beta = sigmoid / 2)",
+   "unit": "-"
+  },
+  "beta_2": {
+   "value": -7.233023166656494,
+   "description": "logit of relaxation rate 2",
+   "unit": "-"
+  },
+  "c1_0": {
+   "value": 2.4774632453918457,
+   "description": "relaxation 1 weight before c = -softplus, 50 degC",
+   "unit": "A/m/T"
+  },
+  "c1_1": {
+   "value": 0.33545973896980286,
+   "description": "slope of c1 in t",
+   "unit": "A/m/T"
+  },
+  "c2_0": {
+   "value": 5.245512962341309,
+   "description": "relaxation 2 weight before c = -softplus, 50 degC",
+   "unit": "A/m/T"
+  },
+  "c2_1": {
+   "value": -1.4490470886230469,
+   "description": "slope of c2 in t",
+   "unit": "A/m/T"
+  },
+  "gam_0": {
+   "value": 7.501028537750244,
+   "description": "common feedback gain at 50 degC",
+   "unit": "mT per A/m"
+  },
+  "gam_1": {
+   "value": -2.7319955825805664,
+   "description": "slope of the feedback gain in t",
+   "unit": "mT per A/m"
+  },
+  "gop_play": {
+   "value": -0.839267909526825,
+   "description": "feedback offset of the plays per unit standardized log width",
+   "unit": "mT per A/m"
+  },
+  "gop_rel1": {
+   "value": -22.653200149536133,
+   "description": "feedback offset of relaxation 1",
+   "unit": "mT per A/m"
+  },
+  "gop_rel2": {
+   "value": -42.74313735961914,
+   "description": "feedback offset of relaxation 2",
+   "unit": "mT per A/m"
+  },
+  "hl": {
+   "value": -0.42815476655960083,
+   "description": "logit of the H-measurement lag pole (eta = 0.6 sigmoid)",
+   "unit": "-"
+  }
+ },
+ "estimator": {
+  "description": "warm-up estimator (not counted as model parameters): prior initial play states (g, g2), initial-mismatch gains K0 and offset prior cpr, observer gains L (x1e-3 for the 8 states, last: offset), log prior strength of the amplitude factors (lq, lqk)",
+  "g": [
+   1.7676631212234497,
+   -0.3977065980434418,
+   -0.03498245030641556,
+   -0.032298509031534195,
+   -0.022099673748016357,
+   0.009835218079388142
+  ],
+  "g2": [
+   -4.110036849975586,
+   -3.050008773803711,
+   -0.8390215039253235,
+   -0.14623598754405975,
+   0.5860658884048462,
+   1.5525823831558228
+  ],
+  "K0": [
+   -10.54410171508789,
+   -12.960680961608887,
+   -17.30912208557129,
+   -16.04533576965332,
+   -19.535024642944336,
+   -14.787348747253418,
+   19.603116989135742,
+   32.141456604003906,
+   -0.3802953362464905
+  ],
+  "cpr": -0.09272131323814392,
+  "L": [
+   0.8029570579528809,
+   0.4526542127132416,
+   -0.463722288608551,
+   -1.3776942491531372,
+   -0.8688153624534607,
+   9.752504348754883,
+   -27.974266052246094,
+   -15.167766571044922,
+   0.09994028508663177
+  ],
+  "lq": 5.137909412384033,
+  "lqk": 0.08376681059598923
+ }
+}

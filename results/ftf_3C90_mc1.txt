@@ -1,0 +1,10 @@
+val mc1:3C90@70 (before) none                     n= 32  SRE avg 10.25 p95 25.70 | 12.20  9.86  8.70  NERE 3.18 1.93 0.41
+val mc1:3C90@70 (before) tau                      n= 32  SRE avg 10.25 p95 25.70 | 12.20  9.86  8.70  NERE 3.18 1.93 0.41
+val mc1:3C90@70 (before) amp                      n= 32  SRE avg 10.25 p95 25.70 | 12.20  9.86  8.70  NERE 3.18 1.93 0.41
+val mc1:3C90@70 (before) tau_amp                  n= 32  SRE avg 10.25 p95 25.70 | 12.20  9.86  8.70  NERE 3.18 1.93 0.41
+val mc1:3C90@70 (before) all                      n= 32  SRE avg 10.25 p95 25.70 | 12.20  9.86  8.70  NERE 3.18 1.93 0.41
+val mc1:3C90@70 (after) none                     n= 32  SRE avg  8.95 p95 21.62 | 10.28  8.68  7.90  NERE 3.37 1.99 0.40
+val mc1:3C90@70 (after) tau                      n= 32  SRE avg  7.05 p95 17.07 |  8.31  6.94  5.88  NERE 2.48 1.23 0.25
+val mc1:3C90@70 (after) amp                      n= 32  SRE avg  8.60 p95 21.52 |  9.75  8.35  7.71  NERE 2.83 1.67 0.37
+val mc1:3C90@70 (after) tau_amp                  n= 32  SRE avg  6.96 p95 16.65 |  8.16  6.86  5.84  NERE 2.35 1.22 0.26
+val mc1:3C90@70 (after) all                      n= 32  SRE avg  6.64 p95 16.12 |  7.86  6.57  5.48  NERE 1.94 0.98 0.20

@@ -1,0 +1,37 @@
+[project]
+name = "mc2-hyst"
+version = "0.1.0"
+description = "Compact governing equations for ferrite B-H dynamics (MagNet Challenge 2 data)"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "torch>=2.8",
+    "pytorch-triton-rocm",
+    "numpy",
+    "pandas",
+    "scipy",
+    "matplotlib",
+    "pyarrow",
+    "openpyxl",
+    "numba",
+    "h5py>=3.16.0",
+    "adjusttext>=1.4.0",
+]
+
+[tool.uv]
+package = false
+environments = ["sys_platform == 'linux' and platform_machine == 'x86_64'"]
+
+[tool.uv.sources]
+torch = { index = "pytorch-rocm" }
+pytorch-triton-rocm = { index = "pytorch-rocm" }
+
+[[tool.uv.index]]
+name = "pytorch-rocm"
+url = "https://download.pytorch.org/whl/rocm6.4"
+explicit = true
+
+[dependency-groups]
+dev = [
+    "pymupdf>=2.0",
+    "typst>=0.15.0",
+]

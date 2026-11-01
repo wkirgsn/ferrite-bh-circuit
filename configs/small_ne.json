@@ -1,0 +1,6 @@
+[{"name": "g31_pas_e1", "fbop": 1, "k0": 1, "cubic": 1, "wsmooth": 1, "qest": 1, "lqk": 1, "qest2": 1, "rgeo": 1, "gsmooth": 1, "tlin": 1, "shared": [], "passive": 1, "energy_w": 1},
+ {"name": "g31_e1", "fbop": 1, "k0": 1, "cubic": 1, "wsmooth": 1, "qest": 1, "lqk": 1, "qest2": 1, "rgeo": 1, "gsmooth": 1, "tlin": 1, "shared": [], "energy_w": 1},
+ {"name": "g31_pas_hl3_tauc_e1", "fbop": 1, "k0": 1, "cubic": 1, "wsmooth": 1, "qest": 1, "lqk": 1, "qest2": 1, "rgeo": 1, "gsmooth": 1, "tlin": 1, "shared": [], "tauc": 1, "passive": 1, "hlag": 3, "energy_w": 1},
+ {"name": "g26_pas_hl3_fbop_e1", "fbop": 0, "k0": 1, "cubic": 1, "wsmooth": 1, "qest": 1, "lqk": 1, "qest2": 1, "rgeo": 1, "gsmooth": 1, "tlin": 1, "shared": [], "passive": 1, "hlag": 3, "energy_w": 1},
+ {"name": "g26_pas_hl3_e1", "fbop": 0, "k0": 1, "cubic": 1, "wsmooth": 1, "qest": 1, "lqk": 1, "qest2": 1, "rgeo": 1, "gsmooth": 1, "tlin": 1, "shared": [], "tauc": 1, "passive": 1, "hlag": 3, "energy_w": 1},
+ {"name": "p24_gamc_a3c_dwc_hl3i_e1", "fbop": 0, "tauc": 1, "k0": 1, "cubic": 1, "wsmooth": 1, "qest": 1, "lqk": 1, "qest2": 1, "rgeo": 1, "gsmooth": 1, "tlin": 1, "passive": 1, "shared": [], "gamc": 1, "a3c": 1, "dwc": 1, "hlag": 3, "hlinit": 0.0, "energy_w": 1}]

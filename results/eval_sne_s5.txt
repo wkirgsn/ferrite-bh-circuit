@@ -1,0 +1,109 @@
+TEST 3C94 g31_e1                   n=465  SRE avg  6.47 p95 16.83 |  8.41  5.92  5.09  NERE 1.03 0.50 0.13
+TEST 3C94 g26_pas_hl3_e1           n=405  SRE avg  6.99 p95 17.69 |  8.80  6.52  5.64  NERE 1.15 0.59 0.15
+TEST 3C94 RHINO GRU8 (published)   n=336  SRE avg  7.47 |  7.93  7.89  6.60
+  per-file SRE avg over scenarios:   f1  f2  f3  f4  f5  f6  f7
+  GRU8 published                5.0 11.7  9.0  8.4  6.0  5.7  6.5
+  g31_e1                        6.1  8.8  6.8  6.3  5.9  5.6  5.8
+  g26_pas_hl3_e1                6.6  8.5  6.9  6.4  6.9  6.6  7.0
+TEST 3C90 g31_e1                   n=465  SRE avg  7.03 p95 18.45 |  8.77  6.80  5.53  NERE 1.15 0.65 0.17
+TEST 3C90 g26_pas_hl3_e1           n=405  SRE avg  8.11 p95 21.62 |  9.86  8.08  6.39  NERE 1.35 0.81 0.21
+TEST 3C90 RHINO GRU8 (published)   n=336  SRE avg  7.91 |  8.85  8.48  6.40
+  per-file SRE avg over scenarios:   f1  f2  f3  f4  f5  f6  f7
+  GRU8 published               13.2  8.5  7.3  7.7  6.5  5.7  6.5
+  g31_e1                       13.0  6.5  6.0  6.2  5.9  5.4  6.1
+  g26_pas_hl3_e1               17.8  7.2  6.2  6.5  6.2  5.9  6.8
+TEST N49 g31_e1                   n=465  SRE avg  7.18 p95 20.61 |  9.24  6.91  5.38  NERE 1.19 0.62 0.17
+TEST N49 g26_pas_hl3_e1           n=405  SRE avg  7.50 p95 20.33 |  9.57  7.13  5.80  NERE 1.22 0.58 0.16
+TEST N49 RHINO GRU8 (published)   n=336  SRE avg  8.39 |  9.37  9.01  6.80
+  per-file SRE avg over scenarios:   f1  f2  f3  f4  f5
+  GRU8 published               11.9 10.6  7.4  7.4  4.6
+  g31_e1                       12.9  8.8  4.6  4.4  5.2
+  g26_pas_hl3_e1               13.1  9.0  4.6  4.7  6.1
+TEST 3F4 g31_e1                   n=465  SRE avg  4.52 p95 12.59 |  6.83  3.76  2.97  NERE 0.81 0.33 0.09
+TEST 3F4 g26_pas_hl3_e1           n=405  SRE avg  4.68 p95 12.20 |  6.84  4.00  3.22  NERE 0.91 0.40 0.09
+TEST 3F4 RHINO GRU8 (published)   n=336  SRE avg  4.83 |  5.78  5.10  3.62
+  per-file SRE avg over scenarios:   f1  f2  f3  f4  f5  f6  f7
+  GRU8 published                8.3  6.1  6.4  6.1  2.5  2.0  2.3
+  g31_e1                        8.0  5.4  5.2  4.7  2.9  2.5  2.9
+  g26_pas_hl3_e1                7.9  5.4  5.1  4.7  3.6  3.0  3.2
+TEST N27 g31_e1                   n=465  SRE avg  7.90 p95 20.71 | 10.30  7.29  6.10  NERE 1.19 0.68 0.19
+TEST N27 g26_pas_hl3_e1           n=405  SRE avg  7.67 p95 20.45 |  9.61  7.04  6.35  NERE 1.11 0.64 0.19
+TEST N27 RHINO GRU8 (published)   n=336  SRE avg  8.35 |  8.82  8.86  7.38
+  per-file SRE avg over scenarios:   f1  f2  f3  f4  f5  f6  f7
+  GRU8 published                4.7 16.7 11.4  9.9  5.2  4.7  5.7
+  g31_e1                        5.7 15.5  9.1  7.9  5.7  5.4  6.0
+  g26_pas_hl3_e1                5.3 15.2  8.9  7.7  5.5  5.2  5.9
+TEST N30 g31_e1                   n=465  SRE avg  7.67 p95 19.08 |  8.91  7.13  6.96  NERE 1.46 0.78 0.21
+TEST N30 g26_pas_hl3_e1           n=405  SRE avg  7.92 p95 20.28 |  9.16  7.42  7.19  NERE 1.50 0.82 0.23
+TEST N30 RHINO GRU8 (published)   n=336  SRE avg  8.24 |  8.53  8.50  7.70
+  per-file SRE avg over scenarios:   f1  f2  f3  f4  f5  f6  f7
+  GRU8 published                6.7 10.4  9.9  9.2  7.6  7.0  6.9
+  g31_e1                        6.3  9.8  9.4  7.9  7.1  6.8  6.3
+  g26_pas_hl3_e1                6.4 10.5  9.9  8.2  7.4  6.9  6.2
+TEST 3E6 g31_e1                   n=465  SRE avg 10.43 p95 23.95 | 11.32 10.13  9.85  NERE 2.08 1.26 0.33
+TEST 3E6 g26_pas_hl3_e1           n=405  SRE avg 10.31 p95 23.38 | 11.25  9.91  9.78  NERE 2.14 1.26 0.33
+TEST 3E6 RHINO GRU8 (published)   n=336  SRE avg 10.22 | 10.82 10.63  9.19
+  per-file SRE avg over scenarios:   f1  f2  f3  f4  f5  f6  f7
+  GRU8 published                8.7  8.1 12.7 12.6 10.7  9.0  9.8
+  g31_e1                        8.4  8.9 12.1 12.4 11.0  9.6 10.6
+  g26_pas_hl3_e1                8.5  8.8 11.5 12.1 10.7  9.6 11.1
+TEST 77 g31_e1                   n=465  SRE avg  7.44 p95 19.65 |  9.09  6.94  6.28  NERE 1.29 0.62 0.17
+TEST 77 g26_pas_hl3_e1           n=405  SRE avg  7.74 p95 20.16 |  9.11  7.23  6.86  NERE 1.46 0.73 0.19
+TEST 77 RHINO GRU8 (published)   n=336  SRE avg  8.44 |  9.46  8.91  6.96
+  per-file SRE avg over scenarios:   f1  f2  f3  f4  f5  f6  f7
+  GRU8 published               13.7 10.5  7.9  7.5  6.8  5.9  6.8
+  g31_e1                       11.3  8.5  6.7  5.9  6.9  6.2  6.5
+  g26_pas_hl3_e1               11.1  8.7  6.9  6.2  7.1  6.7  7.6
+TEST 78 g31_e1                   n=465  SRE avg  6.06 p95 16.42 |  7.77  5.54  4.86  NERE 1.09 0.52 0.13
+TEST 78 g26_pas_hl3_e1           n=405  SRE avg  6.82 p95 17.46 |  8.62  6.41  5.42  NERE 1.17 0.60 0.15
+TEST 78 RHINO GRU8 (published)   n=336  SRE avg  7.15 |  8.13  7.55  5.77
+  per-file SRE avg over scenarios:   f1  f2  f3  f4  f5  f6  f7
+  GRU8 published               11.0  7.9  6.6  7.3  6.0  5.3  5.9
+  g31_e1                        9.6  6.2  5.3  5.2  5.6  5.0  5.5
+  g26_pas_hl3_e1               11.2  6.4  5.5  5.5  6.6  5.8  6.7
+TEST N87 g31_e1                   n=465  SRE avg  7.50 p95 18.43 |  9.99  6.81  5.69  NERE 2.11 0.69 0.17
+TEST N87 g26_pas_hl3_e1           n=405  SRE avg  7.90 p95 18.56 | 10.28  7.22  6.20  NERE 2.30 1.10 0.25
+TEST N87 RHINO GRU8 (published)   n=336  SRE avg  6.86 |  7.83  7.21  5.54
+  per-file SRE avg over scenarios:   f1  f2  f3  f4  f5  f6  f7
+  GRU8 published                8.1  7.5  7.7  6.8  7.0  5.6  5.3
+  g31_e1                        9.8  8.1  7.1  6.5  6.4  7.0  7.6
+  g26_pas_hl3_e1               10.0  8.0  6.7  6.0  6.1  8.9  9.7
+TEST 3C92 g31_e1                   n=465  SRE avg 12.54 p95 31.98 | 13.83 11.99 11.81  NERE 5.34 2.41 0.38
+TEST 3C92 g26_pas_hl3_e1           n=405  SRE avg 13.17 p95 31.93 | 14.69 12.47 12.35  NERE 5.52 2.42 0.47
+TEST 3C92 RHINO GRU8 (published)   n=336  SRE avg 10.97 | 11.78 11.06 10.09
+  per-file SRE avg over scenarios:   
+  GRU8 published               
+  g31_e1                       
+  g26_pas_hl3_e1               
+  3C92: official MC2 test set (1260 windows, one warm-up length each)
+TEST 3C95 g31_e1                   n=465  SRE avg  5.86 p95 15.88 |  8.63  4.71  4.25  NERE 1.57 0.64 0.15
+TEST 3C95 g26_pas_hl3_e1           n=405  SRE avg  6.19 p95 15.75 |  8.46  5.24  4.85  NERE 1.33 0.63 0.15
+TEST 3C95 RHINO GRU8 (published)   n=336  SRE avg  6.51 |  7.29  6.96  5.27
+  per-file SRE avg over scenarios:   
+  GRU8 published               
+  g31_e1                       
+  g26_pas_hl3_e1               
+  3C95: official MC2 test set (945 windows, one warm-up length each)
+TEST FEC007 g31_e1                   n=465  SRE avg  6.66 p95 15.69 |  7.50  6.23  6.24  NERE 0.90 0.57 0.18
+TEST FEC007 g26_pas_hl3_e1           n=405  SRE avg  6.81 p95 16.30 |  7.57  6.35  6.51  NERE 1.03 0.61 0.19
+TEST FEC007 RHINO GRU8 (published)   n=336  SRE avg  8.05 |  8.99  7.91  7.26
+  per-file SRE avg over scenarios:   f0
+  GRU8 published                8.1
+  g31_e1                        6.7
+  g26_pas_hl3_e1                6.8
+TEST FEC014 g31_e1                   n=465  SRE avg  7.66 p95 18.43 | 10.38  7.71  4.88  NERE 1.72 0.73 0.15
+TEST FEC014 g26_pas_hl3_e1           n=405  SRE avg  9.85 p95 23.29 | 12.02 10.01  7.52  NERE 2.06 1.01 0.21
+TEST FEC014 RHINO GRU8 (published)   n=336  SRE avg  6.04 |  7.60  6.48  4.05
+  per-file SRE avg over scenarios:   
+  GRU8 published               
+  g31_e1                       
+  g26_pas_hl3_e1               
+  FEC014: official MC2 test set (1242 windows, one warm-up length each)
+TEST T37 g31_e1                   n=465  SRE avg  6.04 p95 13.74 |  6.46  5.71  5.94  NERE 1.18 0.62 0.19
+TEST T37 g26_pas_hl3_e1           n=405  SRE avg  6.33 p95 14.62 |  6.62  5.99  6.38  NERE 1.24 0.69 0.20
+TEST T37 RHINO GRU8 (published)   n=336  SRE avg  7.16 |  7.73  7.57  6.18
+  per-file SRE avg over scenarios:   
+  GRU8 published               
+  g31_e1                       
+  g26_pas_hl3_e1               
+  T37: official MC2 test set (1080 windows, one warm-up length each)

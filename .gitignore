@@ -1,0 +1,8 @@
+__pycache__/
+.venv/
+logs/
+data/
+*.npz
+*.npy
+paper/*.pdf
+paper/fig/*.png

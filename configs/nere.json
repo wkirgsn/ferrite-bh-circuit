@@ -1,0 +1,4 @@
+[{"name": "final", "fbop": 1, "k0": 1, "cubic": 1, "wsmooth": 1, "qest": 1, "lqk": 1, "qest2": 1, "rgeo": 1, "gsmooth": 1, "tlin": 1, "shared": [], "passive": 1, "hlag": 3},
+ {"name": "final_e1", "fbop": 1, "k0": 1, "cubic": 1, "wsmooth": 1, "qest": 1, "lqk": 1, "qest2": 1, "rgeo": 1, "gsmooth": 1, "tlin": 1, "shared": [], "passive": 1, "hlag": 3, "energy_w": 1},
+ {"name": "final_e3", "fbop": 1, "k0": 1, "cubic": 1, "wsmooth": 1, "qest": 1, "lqk": 1, "qest2": 1, "rgeo": 1, "gsmooth": 1, "tlin": 1, "shared": [], "passive": 1, "hlag": 3, "energy_w": 3},
+ {"name": "final_e10", "fbop": 1, "k0": 1, "cubic": 1, "wsmooth": 1, "qest": 1, "lqk": 1, "qest2": 1, "rgeo": 1, "gsmooth": 1, "tlin": 1, "shared": [], "passive": 1, "hlag": 3, "energy_w": 10}]

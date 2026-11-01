@@ -1,0 +1,8 @@
+[{"name": "final", "fbop": 1, "k0": 1, "cubic": 1, "wsmooth": 1, "qest": 1, "lqk": 1, "qest2": 1, "rgeo": 1, "gsmooth": 1, "tlin": 1, "shared": [], "passive": 1, "hlag": 3, "energy_w": 1},
+ {"name": "no_knee", "fbop": 1, "k0": 1, "cubic": 1, "wsmooth": 1, "qest": 1, "lqk": 1, "qest2": 1, "rgeo": 1, "gsmooth": 1, "tlin": 1, "shared": [], "passive": 1, "hlag": 3, "noknee": 1, "energy_w": 1},
+ {"name": "no_cubic", "fbop": 1, "k0": 1, "cubic": 0, "wsmooth": 1, "qest": 1, "lqk": 1, "qest2": 1, "rgeo": 1, "gsmooth": 1, "tlin": 1, "shared": [], "passive": 1, "hlag": 3, "energy_w": 1},
+ {"name": "rate_indep", "fbop": 1, "k0": 1, "cubic": 1, "wsmooth": 1, "qest": 1, "lqk": 1, "qest2": 1, "rgeo": 1, "gsmooth": 1, "tlin": 1, "shared": [], "passive": 1, "hlag": 3, "rateind": 1, "energy_w": 1},
+ {"name": "no_relax", "fbop": 1, "k0": 1, "cubic": 1, "wsmooth": 1, "qest": 1, "lqk": 1, "qest2": 1, "rgeo": 1, "gsmooth": 1, "tlin": 1, "shared": [], "passive": 1, "hlag": 3, "norel": 1, "energy_w": 1},
+ {"name": "no_feedback", "fbop": 1, "k0": 1, "cubic": 1, "wsmooth": 1, "qest": 1, "lqk": 1, "qest2": 1, "rgeo": 1, "gsmooth": 1, "tlin": 1, "shared": [], "passive": 1, "hlag": 3, "nofb": 1, "energy_w": 1},
+ {"name": "no_meas_corr", "fbop": 1, "k0": 1, "cubic": 1, "wsmooth": 1, "qest": 1, "lqk": 1, "qest2": 1, "rgeo": 1, "gsmooth": 1, "tlin": 1, "shared": [], "passive": 1, "hlag": 3, "notau": 1, "energy_w": 1},
+ {"name": "no_lag", "fbop": 1, "k0": 1, "cubic": 1, "wsmooth": 1, "qest": 1, "lqk": 1, "qest2": 1, "rgeo": 1, "gsmooth": 1, "tlin": 1, "shared": [], "passive": 1, "energy_w": 1}]

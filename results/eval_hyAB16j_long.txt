@@ -1,0 +1,79 @@
+TEST 3C94 final_e1+hyperAB16j      n=9840  SRE avg  4.86 p95 12.44 |  5.74  4.49  4.35  NERE 0.67 0.37 0.11
+TEST 3C94 RHINO GRU8 (published)   n=336  SRE avg  7.47 |  7.93  7.89  6.60
+  per-file SRE avg over scenarios:   f1  f2  f3  f4  f5  f6  f7
+  GRU8 published                5.0 11.7  9.0  8.4  6.0  5.7  6.5
+  final_e1+hyperAB16j           4.4  5.6  4.4  4.5  5.2  4.9  5.0
+TEST 3C90 final_e1+hyperAB16j      n=9840  SRE avg  4.91 p95 13.41 |  6.04  4.56  4.13  NERE 0.71 0.38 0.11
+TEST 3C90 RHINO GRU8 (published)   n=336  SRE avg  7.91 |  8.85  8.48  6.40
+  per-file SRE avg over scenarios:   f1  f2  f3  f4  f5  f6  f7
+  GRU8 published               13.2  8.5  7.3  7.7  6.5  5.7  6.5
+  final_e1+hyperAB16j           8.9  4.6  4.1  4.3  4.5  3.8  4.3
+TEST N49 final_e1+hyperAB16j      n=9840  SRE avg  5.13 p95 14.01 |  6.57  4.87  3.93  NERE 0.57 0.29 0.08
+TEST N49 RHINO GRU8 (published)   n=336  SRE avg  8.39 |  9.37  9.01  6.80
+  per-file SRE avg over scenarios:   f1  f2  f3  f4  f5
+  GRU8 published               11.9 10.6  7.4  7.4  4.6
+  final_e1+hyperAB16j           7.9  5.8  3.6  3.6  4.8
+TEST 3F4 final_e1+hyperAB16j      n=9840  SRE avg  3.46 p95  9.82 |  5.33  2.91  2.13  NERE 0.64 0.23 0.06
+TEST 3F4 RHINO GRU8 (published)   n=336  SRE avg  4.83 |  5.78  5.10  3.62
+  per-file SRE avg over scenarios:   f1  f2  f3  f4  f5  f6  f7
+  GRU8 published                8.3  6.1  6.4  6.1  2.5  2.0  2.3
+  final_e1+hyperAB16j           6.2  3.9  3.6  3.3  2.8  2.2  2.2
+TEST N27 final_e1+hyperAB16j      n=9840  SRE avg  4.77 p95 12.00 |  5.45  4.51  4.36  NERE 0.64 0.39 0.12
+TEST N27 RHINO GRU8 (published)   n=336  SRE avg  8.35 |  8.82  8.86  7.38
+  per-file SRE avg over scenarios:   f1  f2  f3  f4  f5  f6  f7
+  GRU8 published                4.7 16.7 11.4  9.9  5.2  4.7  5.7
+  final_e1+hyperAB16j           3.8  7.4  5.0  4.5  4.5  4.0  4.3
+TEST N30 final_e1+hyperAB16j      n=9840  SRE avg  6.31 p95 15.61 |  7.46  5.84  5.63  NERE 0.98 0.52 0.15
+TEST N30 RHINO GRU8 (published)   n=336  SRE avg  8.24 |  8.53  8.50  7.70
+  per-file SRE avg over scenarios:   f1  f2  f3  f4  f5  f6  f7
+  GRU8 published                6.7 10.4  9.9  9.2  7.6  7.0  6.9
+  final_e1+hyperAB16j           6.0  7.7  7.3  6.2  6.5  5.8  4.8
+TEST 3E6 final_e1+hyperAB16j      n=9840  SRE avg  7.94 p95 18.63 |  8.78  7.64  7.41  NERE 1.24 0.75 0.22
+TEST 3E6 RHINO GRU8 (published)   n=336  SRE avg 10.22 | 10.82 10.63  9.19
+  per-file SRE avg over scenarios:   f1  f2  f3  f4  f5  f6  f7
+  GRU8 published                8.7  8.1 12.7 12.6 10.7  9.0  9.8
+  final_e1+hyperAB16j           7.0  6.7  7.9  8.8  9.6  7.9  7.8
+TEST 77 final_e1+hyperAB16j      n=9840  SRE avg  5.40 p95 14.37 |  6.48  4.96  4.77  NERE 0.82 0.42 0.12
+TEST 77 RHINO GRU8 (published)   n=336  SRE avg  8.44 |  9.46  8.91  6.96
+  per-file SRE avg over scenarios:   f1  f2  f3  f4  f5  f6  f7
+  GRU8 published               13.7 10.5  7.9  7.5  6.8  5.9  6.8
+  final_e1+hyperAB16j           7.5  5.7  4.8  4.4  6.0  4.7  4.7
+TEST 78 final_e1+hyperAB16j      n=9840  SRE avg  4.57 p95 12.06 |  5.56  4.28  3.87  NERE 0.71 0.37 0.10
+TEST 78 RHINO GRU8 (published)   n=336  SRE avg  7.15 |  8.13  7.55  5.77
+  per-file SRE avg over scenarios:   f1  f2  f3  f4  f5  f6  f7
+  GRU8 published               11.0  7.9  6.6  7.3  6.0  5.3  5.9
+  final_e1+hyperAB16j           6.6  4.3  3.7  4.2  4.9  4.1  4.2
+TEST N87 final_e1+hyperAB16j      n=9840  SRE avg  4.67 p95 11.33 |  5.68  4.55  3.78  NERE 0.69 0.36 0.10
+TEST N87 RHINO GRU8 (published)   n=336  SRE avg  6.86 |  7.83  7.21  5.54
+  per-file SRE avg over scenarios:   f1  f2  f3  f4  f5  f6  f7
+  GRU8 published                8.1  7.5  7.7  6.8  7.0  5.6  5.3
+  final_e1+hyperAB16j           5.6  5.0  4.6  4.2  4.3  4.5  4.6
+TEST 3C92 final_e1+hyperAB16j      n=9840  SRE avg  7.56 p95 16.05 |  8.21  7.02  7.44  NERE 1.25 0.72 0.19
+TEST 3C92 RHINO GRU8 (published)   n=336  SRE avg 10.97 | 11.78 11.06 10.09
+  per-file SRE avg over scenarios:   
+  GRU8 published               
+  final_e1+hyperAB16j          
+  3C92: official MC2 test set (1260 windows, one warm-up length each)
+TEST 3C95 final_e1+hyperAB16j      n=9840  SRE avg  3.97 p95 11.03 |  5.40  3.27  3.25  NERE 0.87 0.34 0.09
+TEST 3C95 RHINO GRU8 (published)   n=336  SRE avg  6.51 |  7.29  6.96  5.27
+  per-file SRE avg over scenarios:   
+  GRU8 published               
+  final_e1+hyperAB16j          
+  3C95: official MC2 test set (945 windows, one warm-up length each)
+TEST FEC007 final_e1+hyperAB16j      n=9840  SRE avg  5.70 p95 14.32 |  6.39  5.26  5.46  NERE 0.76 0.46 0.15
+TEST FEC007 RHINO GRU8 (published)   n=336  SRE avg  8.05 |  8.99  7.91  7.26
+  per-file SRE avg over scenarios:   f0
+  GRU8 published                8.1
+  final_e1+hyperAB16j           5.7
+TEST FEC014 final_e1+hyperAB16j      n=9840  SRE avg  4.06 p95 10.18 |  5.65  3.70  2.84  NERE 0.69 0.28 0.08
+TEST FEC014 RHINO GRU8 (published)   n=336  SRE avg  6.04 |  7.60  6.48  4.05
+  per-file SRE avg over scenarios:   
+  GRU8 published               
+  final_e1+hyperAB16j          
+  FEC014: official MC2 test set (1242 windows, one warm-up length each)
+TEST T37 final_e1+hyperAB16j      n=9840  SRE avg  4.79 p95 11.86 |  5.11  4.56  4.70  NERE 0.66 0.38 0.13
+TEST T37 RHINO GRU8 (published)   n=336  SRE avg  7.16 |  7.73  7.57  6.18
+  per-file SRE avg over scenarios:   
+  GRU8 published               
+  final_e1+hyperAB16j          
+  T37: official MC2 test set (1080 windows, one warm-up length each)

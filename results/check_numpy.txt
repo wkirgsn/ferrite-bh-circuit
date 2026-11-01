@@ -1,0 +1,16 @@
+3C94   NumPy vs PyTorch: median 1.7e-05 %, max 2.5e-05 %   SRE 5.655 / 5.655 %
+3C90   NumPy vs PyTorch: median 2.1e-05 %, max 3.6e-05 %   SRE 7.165 / 7.165 %
+N49    NumPy vs PyTorch: median 1.8e-05 %, max 3.0e-05 %   SRE 6.913 / 6.913 %
+3F4    NumPy vs PyTorch: median 1.6e-05 %, max 2.2e-05 %   SRE 4.487 / 4.487 %
+N27    NumPy vs PyTorch: median 1.6e-05 %, max 6.1e-05 %   SRE 9.344 / 9.344 %
+N30    NumPy vs PyTorch: median 1.9e-05 %, max 3.9e-05 %   SRE 6.154 / 6.154 %
+3E6    NumPy vs PyTorch: median 2.2e-05 %, max 3.4e-05 %   SRE 9.313 / 9.313 %
+77     NumPy vs PyTorch: median 2.0e-05 %, max 5.4e-05 %   SRE 5.552 / 5.552 %
+78     NumPy vs PyTorch: median 1.8e-05 %, max 5.1e-05 %   SRE 7.180 / 7.180 %
+N87    NumPy vs PyTorch: median 1.6e-05 %, max 1.0e-04 %   SRE 6.622 / 6.622 %
+3C92   NumPy vs PyTorch: median 1.6e-05 %, max 2.8e-05 %   SRE 9.608 / 9.608 %
+3C95   NumPy vs PyTorch: median 1.4e-05 %, max 3.8e-05 %   SRE 3.604 / 3.604 %
+FEC007 NumPy vs PyTorch: median 1.4e-05 %, max 3.8e-05 %   SRE 5.242 / 5.242 %
+FEC014 NumPy vs PyTorch: median 1.4e-05 %, max 2.3e-05 %   SRE 7.126 / 7.126 %
+T37    NumPy vs PyTorch: median 1.7e-05 %, max 4.9e-05 %   SRE 4.414 / 4.414 %
+max difference over all windows 1.0e-04 % of rms H

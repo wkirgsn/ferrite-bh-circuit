@@ -1,0 +1,19 @@
+# ferrite-bh-circuit
+
+> A 32-parameter B-H model (equivalent circuit) of 15 power ferrites from the MagNet Challenge 2: fitted parameters as
+> JSON, a NumPy implementation and SPICE subcircuits, plus the PyTorch code and results of the paper "A Data-Driven,
+> Gain-Scheduled Equivalent Circuit for the B-H Behavior of Power Ferrites" (W. Kirchgässner, 2026).
+
+Units: B in T, H in A/m, temperature in degC, sample period 62.5 ns (16 MHz). Trained at 25, 50, 70 degC.
+
+## Use the model
+- [AGENTS.md](AGENTS.md): conventions, API, command line, SPICE usage, accuracy, pitfalls
+- [ferrite_bh/model.py](ferrite_bh/model.py): NumPy implementation (predict with warm-up, simulate open loop, coefficients)
+- [ferrite_bh/params/](ferrite_bh/params/): one JSON per material (32 named parameters, estimator, validity, test errors)
+- [ferrite_bh/spice/](ferrite_bh/spice/): one .lib per material, `.subckt <MAT>_core p n params: Tc N Ae le`
+
+## Paper and reproduction
+- [README.md](README.md): overview, setup, data, reproduction
+- [paper/main.typ](paper/main.typ): paper source
+- [src/compact_m.py](src/compact_m.py): PyTorch model and training
+- [scripts/reproduce.sh](scripts/reproduce.sh): every experiment, table and figure
