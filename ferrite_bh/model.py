@@ -160,16 +160,20 @@ def _predict(rec, B, H, T, k):
 
 def simulate(material, B, T, states=None, material_only=True):
     """Open-loop H (A/m) for B (T) at 16 MHz from given states (default: demagnetized, all states zero; start B at 0,
-    e.g. with a ramp). material_only=True: the material alone (u = B, no lag), the true field of the material and what
-    the SPICE subcircuit computes; False: with the measurement correction and lag of the MC2 test bench.
-    states: optional (8,) / (N, 8) initial play (6) and relaxation (2) states. Returns H with the shape of B."""
+    e.g. with a ramp). B: (W,) or a batch (N, W); T: degC, scalar or (N,). material_only=True: the material alone
+    (u = B, no lag), the true field of the material and what the SPICE subcircuit computes; False: with the measurement
+    correction and lag of the MC2 test bench. states: optional (8,) / (N, 8) initial play (6) and relaxation (2) states.
+    Returns H with the shape of B."""
     rec = load(material) if isinstance(material, str) else material
-    co = coefficients(rec, float(T))
     B2 = np.atleast_2d(np.asarray(B, float)); N, W = B2.shape
-    u = B2 if material_only else drive(B2, co)
-    static, _ = static_curve(co, u)
+    T = np.broadcast_to(np.asarray(T, float), (N,))
     s0 = np.zeros((N, 8)) if states is None else np.broadcast_to(np.asarray(states, float), (N, 8)).copy()
-    out = _scan(u, static, np.zeros((N, W)), s0, np.zeros(N), co, 0)
-    if not material_only:
-        out = _lag(out, co["eta"], out[:, 0])
+    out = np.empty((N, W))
+    for Tv in np.unique(T):                                           # coefficients per temperature
+        i = np.where(T == Tv)[0]
+        co = coefficients(rec, float(Tv))
+        u = B2[i] if material_only else drive(B2[i], co)
+        static, _ = static_curve(co, u)
+        o = _scan(u, static, np.zeros((len(i), W)), s0[i], np.zeros(len(i)), co, 0)
+        out[i] = o if material_only else _lag(o, co["eta"], o[:, 0])
     return out[0] if np.ndim(B) == 1 else out

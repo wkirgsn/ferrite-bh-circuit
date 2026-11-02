@@ -42,7 +42,9 @@ operator dynamics (play widths and feedback gains), and it is trained jointly wi
 
 The classical circuit can be read: measurement and material parameters separate, the material part is a discretized
 ODE that can be evaluated at any time step, and it has an exact equivalent circuit of positive inductors, resistors
-and diode-bridge sliders plus controlled sources, which reproduces it in SPICE.
+and diode-bridge sliders plus controlled sources, which reproduces it in SPICE:
+
+![Equivalent circuit: current sense and measurement chain, reversible curve, six viscous plays and two relaxations behind feedback sources; in the scheduled circuits an MLP sets the element values at every step](paper/fig/circuit.png)
 
 ## Repository
 
@@ -67,6 +69,7 @@ Main files:
 | `src/eval_m.py`, `src/official_eval.py`, `src/main_stats.py` | test evaluation, official MC2 metric (95th percentiles), statistics |
 | `src/finetune_m.py` | refitting parameter groups on another specimen (MC2 → MC1 transfer) |
 | `src/spice_check.py`, `src/ode_check.py`, `src/upsample_check.py`, `src/ekf_eval.py` | equivalent circuit in ngspice, step-size consistency, measurement correction at other steps, Kalman-filter estimator |
+| `src/circuit.py` | PyTorch API of the trained circuits (classical, MLP16- and MLP64-scheduled), same call as the NumPy API |
 | `src/hyper_m.py`, `src/scan_tv.py` | the gain-scheduled circuit (per-material MLP on the element values) and its kernel with per-step coefficients |
 | `src/hyper_analysis.py` | energy balance of the scheduled circuit (parametric pumping of the time-varying inductors) |
 
@@ -78,10 +81,9 @@ Main files:
 uv sync
 ```
 
-The lock file pins PyTorch for ROCm 6.4 (AMD GPU), on which all results were computed. For an NVIDIA GPU or a CPU,
-change the `pytorch-rocm` index in `pyproject.toml` to the matching PyTorch index (and `pytorch-triton-rocm` to
-`triton`) before `uv sync`. Without a GPU the model runs on the plain PyTorch reference of the kernel: evaluation and
-all tables and figures work, training is impractically slow.
+The lock file pins PyTorch for NVIDIA GPUs (CUDA 12.8, with Triton). The results of the paper were computed on an AMD
+GPU with ROCm 6.4; for that, follow the comment in `pyproject.toml` before `uv sync`. Without a GPU the model runs on
+the plain PyTorch reference of the kernel: evaluation and all tables and figures work, training is impractically slow.
 
 ## Data
 
@@ -121,7 +123,8 @@ Typst). The GRU8 baseline results must be computed first (see Data).
 
 ## Using the model
 
-Without PyTorch, from the repository root (NumPy only; see `AGENTS.md` for conventions and pitfalls):
+Without PyTorch, from the repository root (NumPy only; see `AGENTS.md` for conventions and pitfalls), the classical
+circuit:
 
 ```python
 import ferrite_bh as fb
@@ -130,6 +133,14 @@ fb.materials()                                # the 15 materials
 H = fb.simulate("N87", B, T=25)               # open loop from the demagnetized state, B in T at 16 MHz starting at 0
 H = fb.predict("N87", B, H_warmup, T=25)      # MC2 setting: measured H over the first k samples sets the state
 fb.coefficients("N87", T=25)                  # a1, Bs, play widths and weights, relaxations, feedback gains, ...
+```
+
+Both `simulate` and `predict` take one window, `B` of shape `(W,)`, or a batch of windows, `B` of shape `(N, W)` with
+`H_warmup` of shape `(N, k)` and the temperature as a scalar or one per window, `T` of shape `(N,)`; `H` has the shape
+of `B`. For example, the MC2 test windows of a material at once:
+
+```python
+H = fb.predict("N87", B, H_warmup, T=T)       # B (N, 1000), H_warmup (N, 500), T (N,) -> H (N, 1000)
 ```
 
 ```
@@ -144,18 +155,20 @@ python -m ferrite_bh simulate N87 --T 25 --B b.csv --out h.csv
 The NumPy implementation reproduces the PyTorch model to 1e-4 % (`results/check_numpy.txt`), the subcircuits the
 NumPy model to a median of 0.1 % (`results/check_spice_lib.txt`).
 
-With PyTorch, the checkpoints of every run in the paper:
+With PyTorch, all three circuits through the same call (GPU if available; NumPy arrays or tensors, one window or a
+batch as above):
 
 ```python
 # from src/
-import torch
-from loader import load
+from circuit import Circuit
 
-model, variants, materials = load("nere")                      # checkpoint models/nere.pt
-e, i = variants.index("final_e1"), materials.index("N87")       # classical circuit, material N87
-# B, H: (N, W) tensors at 16 MHz, T: (N,) in °C; H is used only for the warm-up n < k
-H_pred = model(B, H, T, torch.full((len(B),), i), k)[e]
+c = Circuit("mlp64")                          # "classical", "mlp16" or "mlp64" (MLP-scheduled), seed=0 by default
+c.materials                                   # the 15 materials
+H = c.predict("N87", B, H_warmup, T=T)        # MC2 setting, as fb.predict
 ```
+
+`Circuit(..., seed=s)` selects another training seed (`circuit.seeds("mlp64")` lists the included ones); the
+checkpoints behind it are in `models/` (see the docstring of `src/circuit.py`).
 
 ## License
 

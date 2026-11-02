@@ -7,3 +7,4 @@ data/
 paper/*.pdf
 paper/fig/*.png
 !paper/fig/ranking.png
+!paper/fig/circuit.png

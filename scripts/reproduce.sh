@@ -89,8 +89,9 @@ step_tables() {    # paper/tables/*.typ
   uv run python tab_schedule.py
 }
 
-step_figures() {   # paper/fig/*.pdf
+step_figures() {   # paper/fig/*.pdf, and the README circuit figure paper/fig/circuit.png
   for f in fig_overview fig_examples fig_ranking; do uv run python $f.py; done
+  (cd ../paper && uv run --group dev typst compile --format png --ppi 250 fig_circuit_readme.typ fig/circuit.png)
 }
 
 step_paper() {     # paper/main.pdf and paper/supplement.pdf (typst from the dev dependency group)

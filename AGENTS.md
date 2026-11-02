@@ -34,13 +34,17 @@ Materials: 3C90, 3C92, 3C94, 3C95, 3E6, 3F4, 77, 78, FEC007, FEC014, N27, N30, N
 fb.materials()                         # list of names
 fb.load("N87")                         # JSON record: parameters, estimator, validity, test errors
 fb.coefficients("N87", T=25)           # dict: a1, a3, Bs, bw, r (6), alpha, w (6), beta (2), c (2), gamma (8), tau1, tau2, eta
-fb.simulate("N87", B, T=25)            # open loop from the demagnetized state; B: (W,) or (N, W), must start at 0
+fb.simulate("N87", B, T=25)            # open loop from the demagnetized state; B: (W,) or (N, W), must start at 0;
+                                       # T scalar or (N,), one per window (also in predict)
 fb.simulate("N87", B, T=25, states=s)  # from given states s: (8,) = 6 play states, 2 relaxation states (in T)
 fb.predict("N87", B, H_warmup, T=25)   # MC2 setting: measured H over the first k samples fixes the state
 ```
 
 `predict` returns the full window: the first k samples are the measured warm-up, the rest the prediction. With
 k < 50 the amplitude factors of the warm-up estimator are skipped.
+
+The trained PyTorch circuits (classical, MLP16- and MLP64-scheduled) have the same `predict` call:
+`from circuit import Circuit; Circuit("mlp64").predict("N87", B, H_warmup, T)` from `src/` (needs PyTorch).
 
 ## Command line
 
