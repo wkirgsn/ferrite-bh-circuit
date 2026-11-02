@@ -19,6 +19,7 @@ from mc2lib import *
 from common import GPUSampler, sre_E, summarize
 from compact_m import CompactM, evaluate_M, DEV
 import scan_tv, scan_c
+scan_k = scan_tv.scan if DEV.type == "cuda" else scan_tv.scan_ref   # no GPU: the plain torch reference (as compact_m)
 
 NIN = 4
 NW = 20                                                                         # warm-up encoder: samples 0, 5, ..., 95
@@ -273,10 +274,10 @@ class HyperM(nn.Module):
         else:
             al_k = torch.cat([alpha.expand(-1, -1, M), beta], -1); r_k = torch.cat([r, torch.zeros_like(beta)], -1)
             w_k = torch.cat([w, cz], -1); sl = lambda v, Wn: v
-        run = lambda Wn, st, mm, kk: scan_tv.scan(u[..., :Wn], st[..., :Wn], HE[..., :Wn], torch.cat([p, zz], -1), c[..., 0],
+        run = lambda Wn, st, mm, kk: scan_k(u[..., :Wn], st[..., :Wn], HE[..., :Wn], torch.cat([p, zz], -1), c[..., 0],
                                                  sl(al_k, Wn), sl(r_k, Wn), sl(w_k, Wn), 1e-3 * L[..., :M + J], L[..., -1], kk,
                                                  sl(gamma, Wn), None, None, m=mm[..., :Wn])
-        run_p = lambda Wn, st, mm, kk, p0: scan_tv.scan(u[..., :Wn], st[..., :Wn], HE[..., :Wn], p0, c[..., 0], sl(al_k, Wn),
+        run_p = lambda Wn, st, mm, kk, p0: scan_k(u[..., :Wn], st[..., :Wn], HE[..., :Wn], p0, c[..., 0], sl(al_k, Wn),
                                                        sl(r_k, Wn), sl(w_k, Wn), 1e-3 * L[..., :M + J], L[..., -1], kk,
                                                        sl(gamma, Wn), None, None, m=mm[..., :Wn])
         if k >= 50:                                                             # amplitude factors q, qh (qest2)
