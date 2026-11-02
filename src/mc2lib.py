@@ -62,7 +62,7 @@ def split(data, seed=0, frac=(0.7, 0.15, 0.15)):
         for k, v in idx.items():
             v = np.sort(np.array(v, dtype=int))
             parts[k].append(dict(B=d["B"][v], H=d["H"][v], T=d["T"][v], f=d["f"], file=d["file"], rows=v,
-                                 **{x: d[x][v] for x in ("gid", "dt") if x in d}))
+                                 **({"gid": d["gid"][v]} if "gid" in d else {})))
     return parts
 
 
@@ -118,7 +118,7 @@ def make_windows(part, n_per_file=300, seed=1, win=WIN):
     """Draw challenge-like evaluation windows. Returns dict of arrays (N, win) plus T, file, and the
     full-history prefix length `start` (useful for oracle experiments)."""
     rng = np.random.default_rng(seed)
-    Bs, Hs, Ts, Fs, st, rows, Ds = [], [], [], [], [], [], []
+    Bs, Hs, Ts, Fs, st, rows = [], [], [], [], [], []
     for d in part:
         n, L = d["B"].shape
         seq = rng.integers(0, n, n_per_file)
@@ -126,9 +126,8 @@ def make_windows(part, n_per_file=300, seed=1, win=WIN):
         for q, s in zip(seq, s0):
             Bs.append(d["B"][q, s:s + win]); Hs.append(d["H"][q, s:s + win])
             Ts.append(d["T"][q]); Fs.append(d["file"]); st.append(s); rows.append(q)
-            if "dt" in d: Ds.append(d["dt"][q])
     return dict(B=np.stack(Bs), H=np.stack(Hs), T=np.array(Ts, np.float32), fid=np.array(Fs),
-                start=np.array(st), row=np.array(rows), **({"dt": np.array(Ds, np.float32)} if Ds else {}))
+                start=np.array(st), row=np.array(rows))
 
 
 def metrics(H_pred, H_true, B, k):

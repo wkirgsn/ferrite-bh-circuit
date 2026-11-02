@@ -18,6 +18,7 @@ OUT = Path(__file__).parent / "spice"
 
 
 def subckt(material):
+    """SPICE subcircuit of a material as text (temperature, turns and core geometry as parameters)."""
     rec = load(material); P = {k: v["value"] for k, v in rec["parameters"].items()}
     M, J = 6, 2
     lr = P["log_r_first"] + (P["log_r_last"] - P["log_r_first"]) * np.linspace(0, 1, M)
@@ -28,7 +29,7 @@ def subckt(material):
          f"* fitted on MagNet Challenge 2 data; trained temperatures {rec['validity']['temperatures_degC']} degC",
          "* V(p,n) = N*Ae*dB/dt, current into p = H*le/N. Start from B = 0 (demagnetized).",
          f".subckt {name} p n params: Tc=25 N=1 Ae=1 le=1",
-         f".param tt={{(Tc-50)/25}}",
+         ".param tt={(Tc-50)/25}",
          f".param a1={{{f(P['a1_0'])}+({f(P['a1_1'])})*tt}} a3={{100*({f(P['a3_0'])}+({f(P['a3_1'])})*tt)}}",
          f".param Bs={{max({f(P['Bs_0'])}+({f(P['Bs_1'])})*tt,0.15)}} bw={{exp({f(P['log_bw'])})}}",
          f".param alpha={{1/(1+exp(-({f(P['alpha_0'])}+({f(P['alpha_1'])})*tt)))}} kapa={{-ln(1-alpha)/{DT:g}}}",
@@ -59,6 +60,7 @@ def subckt(material):
 
 
 def write(mats=None):
+    """Write ferrite_bh/spice/<material>.lib for the given materials (default: all); returns the directory."""
     OUT.mkdir(exist_ok=True)
     for mt in mats or materials():
         (OUT / f"{mt}.lib").write_text(subckt(mt))

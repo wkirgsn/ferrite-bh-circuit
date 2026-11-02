@@ -4,7 +4,7 @@ groups: {"variant name": ["param", ...] or "all"}; estimator parameters (g, g2, 
 Each group becomes one variant of a single-material CompactM, initialized from the source law."""
 import argparse, json, time
 import numpy as np, torch
-from mc2lib import *
+from mc2lib import ROOT, split_mat, windows
 from compact_m import CompactM, LAW, evaluate_M, DEV
 from common import GPUSampler, sre_E, summarize
 
@@ -39,8 +39,9 @@ for it in range(args.steps):
     if ew > 0:   # NERE term of the source model's loss (compact_m energy_w)
         dB = torch.gradient(B, dim=1)[0][None]
         sre = sre + ew * ((Hp[..., k:] - H[None, :, k:]) * dB[..., k:]).sum(-1).abs() / (H[None] * dB).abs().sum(-1).clamp(min=1e-9)
-    if args.qreg > 0 and getattr(m, "last_q", None) is not None:
-        sre = sre + args.qreg * (m.last_q ** 2).mean(-1); m.last_q = None
+    q = m.last_q
+    if args.qreg > 0 and q is not None:
+        sre = sre + args.qreg * (q ** 2).mean(-1); m.last_q = None
     lossE = sre.mean(1)
     opt.zero_grad(); lossE.sum().backward(); opt.step(); sched.step()
     if it % 500 == 0:

@@ -21,6 +21,7 @@ if gck != "-":
 
 
 def law_predict(mid, w, k, chunk=256):
+    """Predictions of the circuit of slot index mid on windows w with warm-up k (in chunks, no gradients)."""
     out = []
     with torch.no_grad():
         for i0 in range(0, len(w["B"]), chunk):

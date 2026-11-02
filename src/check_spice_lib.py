@@ -2,9 +2,9 @@
 only, from the demagnetized state) on B waveforms of test windows, at 25 and 70 degC, with a scaled winding and core.
 Usage: python check_spice_lib.py [materials=all] [n windows=2]"""
 import sys, os, subprocess, tempfile, numpy as np
-from mc2lib import ROOT, windows
+from mc2lib import windows
 from spice_check import NGSPICE
-sys.path.insert(0, str(ROOT)); import ferrite_bh as fb
+import ferrite_bh as fb
 from ferrite_bh import spice
 
 DT = fb.DT; N, AE, LE = 8, 1.2e-4, 0.06

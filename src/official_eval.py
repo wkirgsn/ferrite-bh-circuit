@@ -17,6 +17,7 @@ KS = [100, 500, 900]
 
 
 def official(mat):
+    """Official MC2 test set of a final-evaluation material, with the warm-up length k and the reference loss per window."""
     w = official_test(mat); n = len(w["B"])
     w["k"] = np.repeat(KS, n // 3)                                       # thirds (FEC007's padded file is a placeholder)
     d = ROOT / f"data/raw/mc2/evaltest/Material {RAW_LABEL[mat]} - {mat}/{mat}_Testing_True_Loss.csv"
@@ -37,6 +38,7 @@ def summary(w, s, n):
 
 
 def score(w, Hp):
+    """Per-window SRE and energy error in % as in the official MC2 evaluation (predicted part only)."""
     sre, nere = [], []
     for i in range(len(Hp)):
         k = w["k"][i]; p, m, B = Hp[i, k:].astype(float), w["H"][i, k:].astype(float), w["B"][i, k:].astype(float)
@@ -47,6 +49,7 @@ def score(w, Hp):
 
 
 def predict_gru(mat, w):
+    """Predictions of the GRU8 replica (data/pred/<mat>_gru.npz) in the row order of the official test set."""
     d = np.load(ROOT / f"data/pred/{mat}_gru.npz"); n = len(w["k"]) // 3; sc = ["10/90", "50/50", "90/10"]
     if len(d[sc[0]]) == n:                                                # one third of the rows per scenario
         return np.concatenate([d[s] for s in sc])
@@ -54,12 +57,13 @@ def predict_gru(mat, w):
 
 
 def predict_model(ckn, var, mat, w):
-    from compact_m import CompactM, DEV
+    """Predictions of variant var of checkpoint ckn on the official test set, each window with its own k."""
+    from compact_m import DEV
     import compact_m, scan
     if DEV.type == "cpu":
         compact_m.scan = scan.scan_ref
     from loader import load
-    m, names, mats = load(ckn)                                            # CompactM or hybrid
+    m, names, mats = load(ckn)                                            # classical or scheduled circuit
     e, mid = names.index(var), mats.index(mat); out = np.zeros_like(w["H"])
     with torch.no_grad():
         for k in KS:

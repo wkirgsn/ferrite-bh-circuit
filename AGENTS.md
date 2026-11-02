@@ -28,7 +28,7 @@ Materials: 3C90, 3C92, 3C94, 3C95, 3E6, 3F4, 77, 78, FEC007, FEC014, N27, N30, N
   exclude them; `predict()` includes them because it reproduces the challenge's measured H.
 - Do not apply the measurement correction to a waveform at another sample rate; it is a 16 MHz filter.
 
-## Python API (`import ferrite_bh as fb`, from the repository root)
+## Python API (`import ferrite_bh as fb`, after `uv sync`)
 
 ```python
 fb.materials()                         # list of names
@@ -44,9 +44,10 @@ fb.predict("N87", B, H_warmup, T=25)   # MC2 setting: measured H over the first 
 k < 50 the amplitude factors of the warm-up estimator are skipped.
 
 The trained PyTorch circuits (classical, MLP16- and MLP64-scheduled) have the same `predict` call:
-`from circuit import Circuit; Circuit("mlp64").predict("N87", B, H_warmup, T)` from `src/` (needs PyTorch).
+`fb.Circuit("mlp64").predict("N87", B, H_warmup, T)` (needs PyTorch; `fb.seeds("mlp64")` lists the training seeds).
 
 Tests: `uv run --group dev pytest` (synthetic inputs, no data; GPU and ngspice tests skip when unavailable).
+Lint and types: `uv run --group dev ruff check` and `uv run --group dev ty check` (both clean).
 
 ## Command line
 

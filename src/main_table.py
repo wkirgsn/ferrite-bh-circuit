@@ -27,7 +27,7 @@ tab = f"""#figure(placement: top, scope: "parent", kind: table,
     table.hline(),
 {chr(10).join(rows)}
     table.hline(),
-    [*mean*], """ + ", ".join(f"[{mg[k]:.2f}], [{b(mo[k], mg[k])}]" for k in KEYS) + ", " + ", ".join(f"[{b(x, y)}]" for x, y in zip(so, sg)) + f""",
+    [*mean*], """ + ", ".join(f"[{mg[k]:.2f}], [{b(mo[k], mg[k])}]" for k in KEYS) + ", " + ", ".join(f"[{b(x, y)}]" for x, y in zip(so, sg)) + """,
     [*better*], """ + ", ".join(f"[], [{wins[k]}/15]" for k in KEYS) + """, [], [], [],
     table.hline(),
   )),

@@ -14,7 +14,7 @@ runs open loop from the filtered state, exactly as with the learned estimator, a
 Usage: python ekf_eval.py <ckpt> <variant> [--tune]   -> results/ekf_<ckpt>_<variant>.json"""
 import argparse, itertools, json, time
 import numpy as np, torch
-from mc2lib import *
+from mc2lib import ROOT, SCENARIOS, metrics, select_k, windows
 import compact_m, scan
 from compact_m import CompactM
 compact_m.scan = scan.scan_ref
@@ -22,6 +22,7 @@ DEV = torch.device("cpu")
 
 
 def load_single(ckn, var):
+    """One variant of a checkpoint as a single-variant CompactM, and its materials."""
     ck = torch.load(ROOT / f"models/{ckn}.pt", map_location=DEV); e = ck["names"].index(var)
     m = CompactM([ck["variants"][e]], len(ck["mats"]), ck["M"], ck["J"])
     m.load_state_dict({k: v[e:e + 1] for k, v in ck["sd"].items() if k.startswith("p.")}, strict=False)
@@ -31,11 +32,10 @@ def load_single(ckn, var):
 def terms(m, w, mid, k):
     """Model terms of the windows w (one material) at warm-up k, the model's own prediction and its learned estimator."""
     B, H, T = (torch.tensor(w[n], dtype=torch.float32) for n in ("B", "H", "T"))
-    dt = torch.tensor(w["dt"]) if "dt" in w else None
     mi = torch.full((len(B),), mid)
     m.capture = True
     with torch.no_grad():
-        out = m(B, H, T, mi, k, dt=dt)[0]
+        out = m(B, H, T, mi, k)[0]
     c = {n: v[0].double() for n, v in m.cap.items()}; m.capture = False
     c["q2"] = m.last_q[0].double(); c["out"] = out.double(); c["H"] = H.double(); c["B"] = B.double()
     hla = c["hla"]; c["HE"] = (c["H"] - hla * torch.cat([c["H"][:, :1], c["H"][:, :-1]], -1)) / (1 - hla)
@@ -47,7 +47,7 @@ def terms(m, w, mid, k):
 
 def run(c, k, p, cc, gains=None, ekf=None, q=None):
     """Warm-up (observer: constant gains or EKF) and open-loop prediction. p (N,K) states before step 0, cc (N,1)."""
-    M = c["r"].shape[-1]; J = c["beta"].shape[-1]
+    M = c["r"].shape[-1]
     r = torch.cat([c["r"], torch.zeros_like(c["beta"])], -1); al = torch.cat([c["alpha"].expand(-1, M), c["beta"]], -1)
     wv = torch.cat([c["w"], c["cz"]], -1); gam = c["gamma"]; u, HE = c["u"], c["HE"]
     s0, hs, mm = c["static"], c["hsat"], c["mmod"]
@@ -56,7 +56,8 @@ def run(c, k, p, cc, gains=None, ekf=None, q=None):
         x = torch.cat([p, cc, ekf.get("q0", torch.zeros(N, 2, dtype=p.dtype))], -1); Pc = ekf["P0"].clone()
         Kp = p.shape[-1]; I = torch.eye(Kp + 3, dtype=p.dtype)
     else:
-        qq, qh = q[:, :1], q[:, 1:]
+        assert q is not None and gains is not None, "learned estimator: amplitude factors q and observer gains"
+        qq, qh = q[:, :1], q[:, 1:]; Lg, Lgc = gains
     outs = []; hp = HE[:, :1]
     for j in range(W):
         v = u[:, j:j + 1] + gam * hp
@@ -87,7 +88,7 @@ def run(c, k, p, cc, gains=None, ekf=None, q=None):
             h = s0[:, j:j + 1] + qq * (s0[:, j:j + 1] - hs[:, j:j + 1]) + (1 + qh) * mm[:, j:j + 1] * (wv * p).sum(-1, keepdim=True) + cc
             if j < k:                                     # learned constant gains
                 e = HE[:, j:j + 1] - h
-                p = p + gains[0] * e; cc = cc + gains[1] * e; h = HE[:, j:j + 1]
+                p = p + Lg * e; cc = cc + Lgc * e; h = HE[:, j:j + 1]
         outs.append(h); hp = h
     out = torch.cat(outs, -1)
     return CompactM.lag(out, c["hla"], c["H"][:, :1])
@@ -125,6 +126,7 @@ def ekf(c, k, hp, prior="model", amp="ekf"):
 
 
 def score(Hp, c, k):
+    """Per-window SRE and NERE of the predictions Hp against the measured H in c."""
     sre, nere = metrics(Hp.numpy(), c["H"].numpy(), c["B"].numpy(), k)
     return sre, nere
 
@@ -143,7 +145,7 @@ if __name__ == "__main__":
     c = terms(m, {n: v[:20] for n, v in windows("val", mats[0]).items()}, 0, 500)
     print("re-implementation vs model: max |dH| %.2e of %.0f A/m" % ((learned(c, 500) - c["out"]).abs().max(), c["H"].abs().max()), flush=True)
     hp = tuple(float(x) for x in args.hp.split(","))
-    res = {"hp": hp}
+    res: dict = {"hp": hp}
     if args.tune:
         val = {}
         for i, mt in enumerate(mats):

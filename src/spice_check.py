@@ -34,6 +34,7 @@ def coeffs(m, e, mid, B, H, T):
 
 
 def hs(k, u):
+    """Reversible curve h_s(u) in A/m for the circuit coefficients k."""
     return k["a1"] * u + k["a3"] * u ** 3 + 10 * (np.exp(np.minimum((u - k["Bs"]) / k["bw"], 15)) - np.exp(np.minimum((-u - k["Bs"]) / k["bw"], 15)))
 
 
@@ -57,6 +58,7 @@ def law_sim(k, u, sub=1, fine=False):
 
 
 def netlist(k, u, path):
+    """Write the ngspice netlist <path>.cir of the circuit with coefficients k, driven by the flux u."""
     M = k["M"]; J = len(k["beta"]); kap = lambda a: -np.log(1 - min(a, 1 - 1e-6)) / DT
     n = len(u); du = np.diff(u) / DT
     pts = ["0 0"]
@@ -99,6 +101,7 @@ def netlist(k, u, path):
 
 
 def spice(k, u):
+    """Run ngspice on the netlist of k driven by u; returns the current into the core (= H) at the samples."""
     with tempfile.TemporaryDirectory() as d:
         p = os.path.join(d, "law"); netlist(k, u, p)
         r = subprocess.run([NGSPICE, "-b", p + ".cir"], capture_output=True, text=True)

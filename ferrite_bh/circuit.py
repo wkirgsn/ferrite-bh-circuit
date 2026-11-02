@@ -1,7 +1,8 @@
 """PyTorch API of the trained circuits, with the call signature of ferrite_bh.predict (GPU if available, else CPU).
+Needs PyTorch and the repository's model code (src/, on the path after `uv sync`).
 
-    from circuit import Circuit
-    c = Circuit("mlp64")                                  # "classical" (32 parameters), "mlp16" or "mlp64"; seed=0..
+    import ferrite_bh as fb
+    c = fb.Circuit("mlp64")                               # "classical" (32 parameters), "mlp16" or "mlp64"; seed=0..
     H = c.predict("N87", B, H_warmup, T=25)               # MC2 setting, B: (W,) or (N, W) at 16 MHz
 
 Wraps the checkpoints of models/: the classical circuit is variant final_e1 of nere.pt (seed 0) and ne_s<seed>.pt, the
@@ -24,6 +25,7 @@ def seeds(circuit):
 
 
 class Circuit:
+    """A trained circuit (classical, MLP16- or MLP64-scheduled) of one training seed, for all 15 materials."""
     def __init__(self, circuit="classical", seed=0):
         """circuit: "classical", "mlp16" or "mlp64" (MLP-scheduled with 16 / 64 hidden units); seed: training seed."""
         name, variant = CKPT[circuit](seed)

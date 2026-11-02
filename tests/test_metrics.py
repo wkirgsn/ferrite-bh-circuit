@@ -4,6 +4,7 @@ from mc2lib import metrics
 
 
 def test_sre_nere():
+    """Zero error for a perfect prediction, 10 % SRE for a 10 % gain error, the warm-up not scored."""
     W, k = 1000, 500
     t = np.linspace(0, 4 * np.pi, W)[None]
     B = 0.1 * np.sin(t); H = 50 * np.sin(t + 0.3)

@@ -1,14 +1,10 @@
-"""Shared fixtures of the test suite: paths, synthetic excitation (no measurement data needed) and GPU / ngspice skips.
+"""Shared fixtures of the test suite: synthetic excitation (no measurement data needed) and GPU / ngspice skips.
 Run from the repository root: uv run --group dev pytest"""
-import shutil, sys
+import shutil
 from pathlib import Path
 import numpy as np
 import pytest
-
-ROOT = Path(__file__).resolve().parent.parent
-sys.path[:0] = [str(ROOT), str(ROOT / "src")]
-
-import torch                                                          # noqa: E402  (after the path setup)
+import torch
 
 gpu = pytest.mark.skipif(not torch.cuda.is_available(), reason="needs a GPU (Triton kernel)")
 
@@ -27,6 +23,7 @@ def excitation(N=4, W=1000, f=100e3, seed=0, lead=2000):
 
 @pytest.fixture(scope="session")
 def ngspice():
+    """Path of the ngspice binary; skips the test if it is not installed."""
     from spice_check import NGSPICE
     if shutil.which(NGSPICE) is None and not Path(NGSPICE).exists():
         pytest.skip("ngspice not installed (set NGSPICE=/path/to/ngspice)")

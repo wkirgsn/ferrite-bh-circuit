@@ -9,7 +9,7 @@ written by the queue scripts (scripts/lib.sh).
 Usage: python runlog.py [regex]                 table of all runs (test and official merged), names matching regex
        python runlog.py --status <name> <text>  write logs/<name>.status
        python runlog.py --backfill             records from the existing results/*.json (one-off)"""
-import sys, json, re, subprocess, datetime
+import sys, json, subprocess, datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -17,6 +17,7 @@ RUNS = ROOT / "results/runs.jsonl"
 
 
 def _git(*a):
+    """Output of a git command in the repository root, or None if it fails."""
     try:
         return subprocess.run(["git", *a], cwd=ROOT, capture_output=True, text=True, check=True).stdout.strip()
     except Exception:
@@ -39,6 +40,7 @@ def append(rec):
 
 
 def status(name, text):
+    """Write the status line of a queued run to logs/<name>.status."""
     (ROOT / "logs").mkdir(exist_ok=True)
     (ROOT / f"logs/{name}.status").write_text(text.strip() + "\n")
 

@@ -11,6 +11,7 @@ import ferrite_bh as fb
 
 @pytest.mark.parametrize("ckpt,npar", [("hyAB16j_long", 656), ("hyAB64j_s0", 5552)])
 def test_parameter_count(ckpt, npar):
+    """656 and 5552 parameters per material, as in the paper."""
     m, names, mats = load(ckpt)
     assert m.n_params()[0] // len(mats) == npar
 

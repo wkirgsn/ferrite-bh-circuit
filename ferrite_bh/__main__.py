@@ -15,6 +15,7 @@ from . import model, spice
 
 
 def main(argv=None):
+    """Command line entry point (see the module docstring)."""
     ap = argparse.ArgumentParser(prog="python -m ferrite_bh", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
     sub.add_parser("list")

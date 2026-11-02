@@ -23,10 +23,9 @@ ap = argparse.ArgumentParser()
 ap.add_argument("ckpt"); ap.add_argument("--k", type=int, default=500); ap.add_argument("--n", type=int, default=300)
 args = ap.parse_args()
 m, names, mats = load(args.ckpt); m.eval()
-assert "B" in m.opt and m.opt != "C", "options B and AB"
 cap = {}
 _scan, _hyper = scan_tv.scan, m.hyper
-scan_tv.scan = lambda *a, **kw: (cap.__setitem__("scan", (a, kw)), _scan(*a, **kw))[1]
+scan_tv.scan = lambda *a, **kw: (cap.__setitem__("scan", (a, kw)), _scan(*a, **kw))[1]  # ty: ignore[invalid-assignment]  (records the kernel inputs)
 m.hyper = lambda *a: (lambda z: (cap.__setitem__("z", z), z)[1])(_hyper(*a))
 
 
@@ -55,7 +54,7 @@ for mi, mt in enumerate(mats):
         bw = torch.exp(P("log_bw")[..., :1] + g("bw"))
         # recurrence of scan_tv.scan_ref with the states: observer during the warm-up, energy terms in the predicted part
         pump = torch.zeros_like(u[..., 0]); pump_pos = torch.zeros_like(pump); diss = torch.zeros_like(pump); ein = torch.zeros_like(pump)
-        pp = p0; cc = c0[..., None]; hprev = HE[..., :1]
+        pp = p0; cc = c0[..., None]; hprev = HE[..., :1]; vprev = None       # vprev: drive of the previous step
         for j in range(u.shape[-1]):
             v = u[..., j:j + 1] + gam[..., j, :] * hprev
             x = v - pp
@@ -66,6 +65,7 @@ for mi, mt in enumerate(mats):
             elif j > k:
                 th = lambda jj: (a1[..., jj], a3[..., jj], Bs[..., jj], bw[..., jj], mm[..., jj, None] * ww[..., jj, :])
                 def E(jj, uu, vv, ppp):
+                    """Stored energy at step jj: reversible curve and play inductors (drive vv, play states ppp)."""
                     A1, A3, BS, BW, mw = th(jj)
                     return W_rev(uu, A1, A3, BS, BW) + (mw * vv ** 2 / 2).sum(-1) + (-mw * (vv - ppp) ** 2 / 2).sum(-1)
                 dp = E(j, u[..., j - 1], vprev, pp) - E(j - 1, u[..., j - 1], vprev, pp)

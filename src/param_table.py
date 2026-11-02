@@ -7,6 +7,7 @@ from compact_m import CompactM, DEV
 
 
 def specimen(mat):
+    """Core shape, turns, effective length and area of the MC2 specimen (empty without the info file)."""
     p = ROOT / f"data/info/{mat}_Test_Info.xlsx"
     if not p.exists():
         return {}
@@ -14,7 +15,7 @@ def specimen(mat):
     return dict(core=x["Shape"], N=int(x["N1"]), Le=float(x["Le (m)"]), Ae=float(x["Ae (m2)"]))
 
 
-rows = []
+rows: list[dict] = []
 for arg in sys.argv[1:]:
     ck_name, var = arg.split(":")
     ck = torch.load(ROOT / f"models/{ck_name}.pt", map_location=DEV); e = ck["names"].index(var)

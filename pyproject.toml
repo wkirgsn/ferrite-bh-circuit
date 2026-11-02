@@ -16,8 +16,17 @@ dependencies = [
     "adjusttext>=1.4.0",
 ]
 
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["ferrite_bh"]
+
+[tool.hatch.build]
+dev-mode-dirs = [".", "src"]          # editable install (uv sync): ferrite_bh and the scripts' modules in src/ importable
+
 [tool.uv]
-package = false
 environments = ["sys_platform == 'linux' and platform_machine == 'x86_64'"]
 
 # PyTorch for NVIDIA GPUs (CUDA 12.8, includes Triton). For an AMD GPU (the paper's results were computed on ROCm 6.4),
@@ -35,8 +44,22 @@ explicit = true
 dev = [
     "pymupdf>=2.0",
     "pytest>=9.2.0",
+    "ruff==0.14.3",
+    "ty==0.0.95",
     "typst>=0.15.0",
 ]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py311"
+include = ["src/**/*.py", "ferrite_bh/**/*.py", "tests/**/*.py", "paper/**/*.py"]
+
+[tool.ty.src]
+include = ["src", "ferrite_bh", "tests", "paper"]
+
+[tool.ruff.lint]
+extend-select = ["D100", "D101", "D102", "D103"]   # docstrings of modules, classes, methods and functions
+# the code's compact style: several statements per line, grouped imports, short math names, assigned lambdas
+ignore = ["E401", "E701", "E702", "E731", "E741"]

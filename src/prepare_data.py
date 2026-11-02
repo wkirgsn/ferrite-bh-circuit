@@ -29,6 +29,7 @@ def csv_to_npy(src, prefix, dst, mat):
 
 
 def mc2():
+    """Convert the MC2 training data of the 10 materials (zipped CSV files) to data/npy/<material>/."""
     for mat in MC2_MATS:
         if (ROOT / f"data/npy/{mat}/{mat}_1_B.npy").exists():
             print("skip", mat); continue
@@ -40,6 +41,7 @@ def mc2():
 
 
 def evalmats():
+    """Convert the training data and the labeled test set of the 5 final-evaluation materials."""
     for mat in EVAL_MATS:
         if not (ROOT / f"data/npy/{mat}/{mat}_1_B.npy").exists():
             lab = RAW_LABEL[mat]
@@ -50,6 +52,7 @@ def evalmats():
 
 
 def mc1():
+    """Convert the MagNet (MC1) raw data of the transfer materials to data/mc1/<material>.npz."""
     (ROOT / "data/mc1").mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(RAW / "mc1/Raw Data.zip") as z:
         for mat in MC1_MATS:

@@ -40,7 +40,8 @@ The classical circuit can be read: measurement and material parameters separate,
 ## Repository
 
 ```
-ferrite_bh/   NumPy implementation, fitted parameters (JSON) and SPICE subcircuits of the classical circuit
+ferrite_bh/   NumPy implementation, fitted parameters (JSON) and SPICE subcircuits of the classical circuit,
+              and the PyTorch API of all trained circuits (ferrite_bh.Circuit)
 src/          model, training, evaluation, checks, tables and figures (one script each, docstring = usage)
 configs/      run configurations (model variants trained together in one run)
 models/       trained checkpoints of every run in the paper (all variants of a run per file)
@@ -61,13 +62,12 @@ Main files:
 | `src/eval_m.py`, `src/official_eval.py`, `src/main_stats.py` | test evaluation, official MC2 metric (95th percentiles), statistics |
 | `src/finetune_m.py` | refitting parameter groups on another specimen (MC2 → MC1 transfer) |
 | `src/spice_check.py`, `src/ode_check.py`, `src/upsample_check.py`, `src/ekf_eval.py` | equivalent circuit in ngspice, step-size consistency, measurement correction at other steps, Kalman-filter estimator |
-| `src/circuit.py` | PyTorch API of the trained circuits (classical, MLP16- and MLP64-scheduled), same call as the NumPy API |
 | `src/hyper_m.py`, `src/scan_tv.py` | the gain-scheduled circuit (per-material MLP on the element values) and its kernel with per-step coefficients |
 | `src/hyper_analysis.py` | energy balance of the scheduled circuit (parametric pumping of the time-varying inductors) |
 
 ## Setup
 
-[uv](https://docs.astral.sh/uv/) installs the environment from `pyproject.toml` / `uv.lock`:
+[uv](https://docs.astral.sh/uv/) installs the environment from `pyproject.toml` / `uv.lock`, with this repository as an editable package (`import ferrite_bh` and the modules in `src/` work from any directory):
 
 ```
 uv sync
@@ -93,6 +93,8 @@ The tests need no measurement data; they run on synthetic excitation within abou
 | `tests/test_scheduled.py` | with the scheduling MLP switched off, the scheduled circuit is exactly the classical one; parameter counts 656 and 5552 |
 | `tests/test_spice.py` | the SPICE subcircuits match the NumPy circuit (skipped without ngspice; set `NGSPICE` to its path) |
 | `tests/test_metrics.py` | the challenge metrics SRE and NERE |
+
+The code passes `uv run --group dev ruff check` (configuration in `pyproject.toml`) and `uv run --group dev ty check`.
 
 ## Data
 
@@ -127,7 +129,7 @@ The GRU8 baseline results must be computed first (see Data).
 
 ## Using the model
 
-Without PyTorch, from the repository root (NumPy only; see `AGENTS.md` for conventions and pitfalls), the classical circuit:
+The classical circuit with NumPy only (see `AGENTS.md` for conventions and pitfalls):
 
 ```python
 import ferrite_bh as fb
@@ -157,15 +159,15 @@ The NumPy implementation reproduces the PyTorch model to 1e-4 % (`results/check_
 With PyTorch, all three circuits through the same call (GPU if available; NumPy arrays or tensors, one window or a batch as above):
 
 ```python
-# from src/
-from circuit import Circuit
+import ferrite_bh as fb
 
-c = Circuit("mlp64")                          # "classical", "mlp16" or "mlp64" (MLP-scheduled), seed=0 by default
+c = fb.Circuit("mlp64")                       # "classical", "mlp16" or "mlp64" (MLP-scheduled), seed=0 by default
 c.materials                                   # the 15 materials
 H = c.predict("N87", B, H_warmup, T=T)        # MC2 setting, as fb.predict
 ```
 
-`Circuit(..., seed=s)` selects another training seed (`circuit.seeds("mlp64")` lists the included ones); the checkpoints behind it are in `models/` (see the docstring of `src/circuit.py`).
+`fb.Circuit(..., seed=s)` selects another training seed (`fb.seeds("mlp64")` lists the included ones); the checkpoints behind it are in `models/` (see `ferrite_bh/circuit.py`).
+`fb.Circuit` needs PyTorch; the NumPy functions above do not.
 
 ## License
 

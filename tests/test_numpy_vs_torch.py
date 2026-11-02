@@ -1,5 +1,5 @@
 """The NumPy package reproduces the trained PyTorch classical circuit (models/nere.pt, variant final_e1), and the
-PyTorch API (src/circuit.py) wraps the same checkpoints; synthetic windows, no measurement data needed."""
+PyTorch API (ferrite_bh.Circuit) wraps the same checkpoints; synthetic windows, no measurement data needed."""
 import numpy as np
 import pytest
 import torch
@@ -9,6 +9,7 @@ from conftest import excitation
 
 @pytest.fixture(scope="module")
 def windows():
+    """Synthetic measured windows of every material (NumPy circuit with the measurement chain)."""
     B, T = excitation(N=6, seed=3)
     out = {}
     for mat in fb.materials():
@@ -19,12 +20,13 @@ def windows():
 
 @pytest.fixture(scope="module")
 def classical():
-    from circuit import Circuit
-    return Circuit("classical")
+    """The classical circuit through the PyTorch API."""
+    return fb.Circuit("classical")
 
 
 @pytest.mark.parametrize("k", [100, 500, 900])
 def test_numpy_reproduces_torch(windows, classical, k):
+    """NumPy predict equals the PyTorch classical circuit (relative 1e-5) for every material."""
     for mat, (B, H, T) in windows.items():
         Pn = fb.predict(mat, B, H[:, :k], T)
         Pt = classical.predict(mat, B, H[:, :k], T)
@@ -33,11 +35,12 @@ def test_numpy_reproduces_torch(windows, classical, k):
 
 
 def test_circuit_api_types_and_batching(windows):
-    from circuit import Circuit, seeds
+    """All three circuits: materials, NumPy and tensor input and output, single window equals batch row."""
+    from ferrite_bh.circuit import seeds
     B, H, T = windows["N87"]
     for name in ("classical", "mlp16", "mlp64"):
         assert 0 in seeds(name)
-        c = Circuit(name)
+        c = fb.Circuit(name)
         assert sorted(c.materials) == fb.materials()
         P = c.predict("N87", B, H[:, :500], T)
         assert isinstance(P, np.ndarray) and P.shape == B.shape

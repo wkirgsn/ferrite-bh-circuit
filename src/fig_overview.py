@@ -3,7 +3,7 @@
 (c) DC-biased minor loops with fast ripple; (d) temperature; (e) frequency (rate dependence)."""
 import numpy as np, matplotlib
 matplotlib.use("Agg"); import matplotlib.pyplot as plt
-from mc2lib import ROOT, windows, load_material, FS
+from mc2lib import ROOT, windows, load_material
 
 INK, MUTED, SHADE = "#0b0b0b", "#8a8984", "#efeeea"
 C = ["#2a78d6", "#eb6834", "#1baf7a"]                  # categorical slots 1-3 (validated all-pairs)
@@ -14,6 +14,7 @@ plt.rcParams.update({"font.size": 7, "font.family": "serif", "axes.linewidth": 0
 
 
 def by_f(mat, f):
+    """The file of a material measured at the switching frequency f."""
     return next(d for d in load_material(mat) if abs(d["f"] - f) < 1)
 
 
@@ -55,6 +56,7 @@ axh.text((k + 1000) / 32, ytop, "predict H from B, T", ha="center", va="top", fo
 axb.set_title(f"(a) MC2 task, 3C94, {w['T'][q]:.0f} °C", fontsize=7, loc="left", color=INK)
 
 def loop(ax, title):
+    """Title and axis labels of a B-H loop panel."""
     ax.set_title(title, fontsize=7, loc="left", color=INK); ax.set_xlabel("H in A/m"); ax.set_ylabel("B in mT")
 
 # (b) deep saturation, 3C90 at 50 kHz and 70 °C

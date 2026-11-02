@@ -2,9 +2,9 @@
 material (warm-up k = 100, 500, 900): relative RMS difference of the predicted part, and the test SRE of both.
 Usage: python check_numpy.py [n windows per material=24]"""
 import sys, numpy as np, torch
-from mc2lib import ROOT, windows
+from mc2lib import windows
 from loader import load
-sys.path.insert(0, str(ROOT)); import ferrite_bh as fb
+import ferrite_bh as fb
 
 n = int(sys.argv[1]) if len(sys.argv) > 1 else 24
 m, names, mats = load("nere"); e = names.index("final_e1"); rng = np.random.default_rng(0); worst = 0

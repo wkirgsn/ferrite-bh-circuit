@@ -34,10 +34,12 @@ def load(material):
 
 
 def _sig(x):
+    """Logistic sigmoid."""
     return 1.0 / (1.0 + np.exp(-x))
 
 
 def _softplus(x):
+    """Softplus log(1 + e^x), overflow-safe."""
     return np.logaddexp(0.0, x)
 
 
@@ -124,6 +126,7 @@ def predict(material, B, H_warmup, T, k=None):
 
 
 def _predict(rec, B, H, T, k):
+    """predict() for windows at one temperature: warm-up estimator, amplitude factors, recurrence, lag."""
     co = coefficients(rec, T); est = rec["estimator"]; N, W = B.shape
     eta = co["eta"]
     HE = (H - eta * np.concatenate([H[:, :1], H[:, :-1]], 1)) / (1 - eta)    # de-lagged warm-up
@@ -145,6 +148,7 @@ def _predict(rec, B, H, T, k):
         Ho = _scan(u[:, :k], static[:, :k], HE[:, :k], s0, c, co, 1, L, Lc)
         tt = np.linspace(-1, 1, k - 1)
         def dtr(x):
+            """Remove the mean and the linear trend along the last axis."""
             y = x - x.mean(-1, keepdims=True)
             return y - (y * tt).sum(-1, keepdims=True) / (tt * tt).sum() * tt
         yd = dtr(HE[:, 1:k] - Ho[:, 1:])

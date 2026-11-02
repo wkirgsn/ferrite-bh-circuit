@@ -11,6 +11,7 @@ N, AE, LE = 8, 1.2e-4, 0.06
 
 @pytest.mark.parametrize("mat", ["N87", "3C90", "77"])
 def test_spice_matches_numpy(mat, ngspice):
+    """Open-loop SPICE simulation within 2 % rms of the NumPy circuit."""
     per = 160; n = np.arange(6 * per)
     B = 0.15 * np.minimum(n / (2 * per), 1) * np.sin(2 * np.pi * n / per); T = 25.0
     Hn = fb.simulate(mat, B, T)

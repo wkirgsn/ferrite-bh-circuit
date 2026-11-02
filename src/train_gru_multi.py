@@ -2,14 +2,17 @@
 batched pass, one per material slot (slots may carry a training restriction "<mat>#<spec>", see mc2lib.restrict).
 Usage: python train_gru_multi.py --mats 3C94,3C94#T25_50,... --name <out> [--steps 20000 --bs 512]"""
 import argparse, time, numpy as np, torch
-from mc2lib import split_mat, windows, select_k, SCENARIOS, ROOT
+from mc2lib import split_mat, ROOT
 from common import GPUSampler
 
 DEV = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 class MultiGRU(torch.nn.Module):
+    """E independent GRU8 models (one per material slot) evaluated together: the RHINO-MAG GRU8 replica."""
+    norm: torch.Tensor; fe: torch.Tensor                                        # input/output scales, derivative scales
     def __init__(s, E, hid=8, nin=4):
+        """E models with hid hidden units and nin inputs, initialized uniformly as torch.nn.GRU (fixed seed)."""
         super().__init__()
         g = torch.Generator().manual_seed(0); a = hid ** -0.5
         u = lambda *sh: torch.nn.Parameter((torch.rand(*sh, generator=g) * 2 - 1) * a)
@@ -18,12 +21,13 @@ class MultiGRU(torch.nn.Module):
         s.register_buffer("norm", torch.ones(E, 3)); s.register_buffer("fe", torch.ones(E, 2))   # Bm, Hm, Tm; dB, d2B max
 
     def cell(s, x, h):                                            # x (E,N,nin), h (E,N,hid), as torch.nn.GRUCell
+        """One GRU step of all models: x (E, N, nin), h (E, N, hid) -> new h, as torch.nn.GRUCell."""
         gi = torch.einsum("egi,eni->eng", s.Wi, x) + s.bi[:, None]; gh = torch.einsum("egh,enh->eng", s.Wh, h) + s.bh[:, None]
         ir, iz, inn = gi.chunk(3, -1); hr, hz, hn = gh.chunk(3, -1)
         r, z = torch.sigmoid(ir + hr), torch.sigmoid(iz + hz)
         return (1 - z) * torch.tanh(inn + r * hn) + z * h
 
-    def forward(s, B, H, T, k):
+    def forward(s, B, H, T, k):  # ty: ignore[invalid-mutable-override]  (torch declares forward as an attribute)
         """B, H (E,N,W), T (E,N); first k samples of H known (teacher forced into hidden state 0). Returns (E,N,W)."""
         Bm, Hm, Tm = (s.norm[:, i, None, None] for i in range(3))
         b = B / Bm; db = torch.gradient(b, dim=-1)[0]; d2b = torch.gradient(db, dim=-1)[0]
@@ -76,8 +80,9 @@ if __name__ == "__main__":
         loss = (err / rms).mean(-1)                                                               # (E,)
         opt.zero_grad(); loss.sum().backward()
         with torch.no_grad():                                                                     # per-model clipping at 1
-            gn = torch.sqrt(sum((p.grad ** 2).flatten(1).sum(1) for p in m.parameters()))
-            for p in m.parameters(): p.grad *= (1.0 / gn.clamp(min=1.0)).view(-1, *[1] * (p.dim() - 1))
+            gs = [p.grad for p in m.parameters() if p.grad is not None]
+            gn = torch.sqrt(sum(((g ** 2).flatten(1).sum(1) for g in gs), torch.zeros((), device=gs[0].device)))
+            for g in gs: g *= (1.0 / gn.clamp(min=1.0)).view(-1, *[1] * (g.dim() - 1))
         opt.step(); sched.step()
         if it % 1000 == 0 or it == args.steps - 1:
             print(f"it {it} loss " + "/".join(f"{100*x:.2f}" for x in loss.tolist()) + f" t {time.time()-t0:.0f}s", flush=True)

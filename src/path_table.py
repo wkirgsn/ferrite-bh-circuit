@@ -1,13 +1,14 @@
 """Final model and its smaller variants (paper table tab:path) from the eval_*.txt files of eval_m.py: mean test SRE over the 15
 materials, per scenario, and the number of materials on which the model beats the published GRU8.
 Usage: python path_table.py   -> paper/tables/path.typ"""
-import re, glob, statistics as st
+import re, statistics as st
 from mc2lib import ROOT, RAW_LABEL
 
 LETTER = {v: k for k, v in RAW_LABEL.items()}                     # old result files use the masked letters
 
 
 def parse(f):
+    """Test SRE per variant and material from an eval_m.py output: {variant: {material: [mean, 10/90, 50/50, 90/10]}}."""
     d = {}
     for l in open(f):
         m = re.match(r"TEST (\S+) (.+?)\s+n=\s*\d+\s+SRE avg\s+([\d.]+)(?: p95 [\d.]+)? \|\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)", l)
@@ -41,12 +42,14 @@ if __name__ == "__main__":
         if not vals:
             continue
         mats = list(vals[0]); g = gru
+        assert g is not None, f"no {G} results in results/eval_*.txt"
         mean = [st.mean(st.mean(x[m][j] for m in mats) for x in vals) for j in range(4)]
         wins = st.mean(sum(x[m][0] < g[m][0] for m in mats) for x in vals)
         sd = st.stdev([st.mean(x[m][0] for m in mats) for x in vals]) if len(vals) > 1 else None
         tot = f"{mean[0]:.2f}" + (f" ± {sd:.2f}" if sd is not None else "")
         lines.append(f"    [{desc}], [{npar}], [{tot}], " + ", ".join(f"[{x:.2f}]" for x in mean[1:]) + f", [{wins:.0f}]," +
                      (f"  // {len(vals)} runs" if len(vals) > 1 else ""))
+    assert gru is not None, f"no {G} results in results/eval_*.txt"
     gm = [st.mean(gru[m][j] for m in gru) for j in range(4)]
     tab = f"""#figure(placement: top, scope: "parent", kind: table,
       text(size: 8pt, table(

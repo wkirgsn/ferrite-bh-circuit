@@ -8,6 +8,7 @@ MATS = fb.materials()
 
 
 def test_materials():
+    """The 15 MC2 materials have fitted parameters."""
     assert len(MATS) == 15 and {"N87", "3C90", "T37"} <= set(MATS)
 
 
@@ -24,6 +25,7 @@ def test_passive_coefficients(mat):
 
 @pytest.mark.parametrize("material_only", [True, False])
 def test_batch_equals_single(material_only):
+    """A batch of windows gives exactly the results of the windows one by one."""
     B, T = excitation(N=5)
     Hb = fb.simulate("N87", B, T, material_only=material_only)
     assert Hb.shape == B.shape
@@ -32,6 +34,7 @@ def test_batch_equals_single(material_only):
 
 
 def test_predict_batch_and_shapes():
+    """predict: shapes, warm-up returned as measured, batch equals single windows, full-length H with k."""
     B, T = excitation(N=5); H = fb.simulate("3C90", B, T, material_only=False)
     B, H = B[:, -1000:], H[:, -1000:]
     P = fb.predict("3C90", B, H[:, :500], T)
@@ -53,7 +56,7 @@ def test_odd_symmetry(mat):
 @pytest.mark.parametrize("T", [25.0, 70.0])
 def test_dissipation(mat, T):
     """Passivity: in periodic steady state the loop encloses a positive area, the energy per cycle oint H dB > 0."""
-    f, per = 100e3, 160                                               # 100 kHz at 16 MHz: 160 samples per period
+    per = 160                                                         # 100 kHz at 16 MHz: 160 samples per period
     n = np.arange(40 * per)
     B = 0.15 * np.minimum(n / (10 * per), 1) * np.sin(2 * np.pi * n / per)
     H = fb.simulate(mat, B, T)
@@ -69,6 +72,7 @@ def test_steady_state_reached():
 
 
 def test_states_and_zero_input():
+    """Zero input gives zero field; explicit zero states equal the demagnetized default."""
     assert np.array_equal(fb.simulate("N87", np.zeros(100), 25.0), np.zeros(100))
     B, T = excitation(N=1)
     s = np.zeros(8)

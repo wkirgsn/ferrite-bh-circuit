@@ -3,17 +3,17 @@ RHINO_MAG: path of the RHINO-MAG repository, default ../RHINO-MAG). Writes data/
 Usage: python eval_rhino.py [material]   (default 3C94)"""
 import os, sys, numpy as np
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-import jax.numpy as jnp
-from rhmag.utils.model_evaluation import reconstruct_model_from_file
-from mc2lib import report, windows, ROOT
+sys.path.insert(0, str(Path(__file__).resolve().parent))      # runs in the RHINO-MAG environment, without this project
+import jax.numpy as jnp  # ty: ignore[unresolved-import]  (RHINO-MAG environment)
+from rhmag.utils.model_evaluation import reconstruct_model_from_file  # ty: ignore[unresolved-import]  (RHINO-MAG environment)
+from mc2lib import report, windows, ROOT, EVAL_MATS, RAW_LABEL
 mat = sys.argv[1] if len(sys.argv) > 1 else "3C94"
-from mc2lib import EVAL_MATS, RAW_LABEL
 pat = f"{RAW_LABEL.get(mat, mat)}_GRU8_final-reduced-features-f32_*_seed12.eqx" if mat in EVAL_MATS else f"{mat}_GRU8_reduced-features-f32_*_seed12.eqx"
 f = sorted((Path(os.environ.get("RHINO_MAG", Path(__file__).resolve().parents[2] / "RHINO-MAG")) / "data/models").glob(pat))[0]
 m = reconstruct_model_from_file(f.name)
 w = windows("test", mat)
 def pred(B, H, T, k):
+    """GRU8 prediction after the warm-up k, with the measured warm-up in front (as for the other models)."""
     Hp = m(B_past=jnp.array(B[:, :k]), H_past=jnp.array(H[:, :k]), B_future=jnp.array(B[:, k:]), T=jnp.array(T))
     return np.concatenate([H[:, :k], np.array(Hp)], 1)
 r = report(pred, w, f"RHINO GRU8 {mat} (published)")
