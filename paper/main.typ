@@ -526,7 +526,10 @@ sequences, the model is as accurate as with all of them (6.5 % vs 6.4 %), and so
 the training range they differ. Trained up to 320 kHz, the GRU fails at 500 and 800 kHz (54.5 %, up to 106 % on 77),
 while the model loses 4.9 points (10.2 % vs 5.3 %), most of it on N87. Across temperature, the GRU loses about twice
 as much: interpolating to 50 °C costs the model 0.8 points against 6.4, extrapolating to 70 °C 3.7 against 8.5, the
-latter mostly on 77.
+latter mostly on 77. The MLP64-scheduled circuit, trained in the same way (one seed), also needs little data (4.5 % with
+2 % of the sequences vs 4.2 %), but outside the trained temperatures and frequencies its advantage over the classical
+circuit vanishes: extrapolated to 70 °C, it is less accurate (11.1 % vs 9.3 %), above 320 kHz on par (10.7 % vs
+10.2 %), and in both cases still far more accurate than the GRU.
 
 #include "tables/ood.typ"
 

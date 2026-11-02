@@ -32,12 +32,16 @@ step_ablation() {  # one element removed at a time (~3.6 h)
   train ablate ablate "--accum 8"
 }
 
-step_ood() {       # restricted training (temperature, frequency, data fraction) vs the GRU8 replica (~2 h)
+step_ood() {       # restricted training (temperature, frequency, data fraction): classical circuit, GRU8 replica (~2 h)
+                   # and the MLP64-scheduled circuit on the classical one (~3 h)
   OOD=$(cat ../configs/ood_slots.txt)
   uv run python compact_m.py --variants ../configs/ood_final.json --mats "$OOD" --win 1000 --ks 100,500,900 --bs 768 \
     --accum 2 --qreg 0.5 --name ood_final > ../logs/ood_final.txt 2>&1
   uv run python train_gru_multi.py --mats "$OOD" --name gru_ood --steps 20000 > ../logs/gru_ood.txt 2>&1
   uv run python ood_eval.py ood_final final gru_ood > ../results/ood_final.txt 2>&1
+  uv run python hyper_m.py --init ood_final:final --opt AB --hidden 64 --bs 256 --accum 4 --joint --seed 0 --steps 20000 \
+    --name hyAB64j_ood > ../logs/hyAB64j_ood.txt 2>&1
+  uv run python ood_eval.py hyAB64j_ood final+hyperAB64j gru_ood > ../results/ood_hyAB64j_ood.txt 2>&1
 }
 
 step_transfer() {  # MC2 -> MC1 specimen transfer, refitting parameter groups (needs step_final; ~3 min per material)

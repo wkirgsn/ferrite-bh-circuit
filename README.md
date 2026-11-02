@@ -120,11 +120,11 @@ They are not included; `src/eval_rhino.py` computes them from the published RHIN
 ## Reproducing the paper
 
 ```
-scripts/reproduce.sh                 # everything, about 37 GPU hours on one AMD RX 9070 XT
+scripts/reproduce.sh                 # everything, about 40 GPU hours on one AMD RX 9070 XT
 scripts/reproduce.sh tables figures  # only the tables and figures, from the included results and checkpoints
 ```
 
-Steps: `final` (classical circuit and energy-error weights, 10 seeds), `path` (smaller models, 10 seeds of the 31- and 27-parameter variants), `ablation`, `ood` (extrapolation and data efficiency, with a GRU8 replica), `transfer` (MC2 → MC1 specimens), `checks` (SPICE, step size, Kalman filter), `schedule` (gain-scheduled circuits, 16 and 64 hidden units, 10 seeds each, and the energy check), `export` (JSON, SPICE subcircuits and their checks), `tables`, `figures`, `paper` (compiles `paper/main.pdf` and `paper/supplement.pdf` with Typst).
+Steps: `final` (classical circuit and energy-error weights, 10 seeds), `path` (smaller models, 10 seeds of the 31- and 27-parameter variants), `ablation`, `ood` (extrapolation and data efficiency, with a GRU8 replica and the MLP64-scheduled circuit), `transfer` (MC2 → MC1 specimens), `checks` (SPICE, step size, Kalman filter), `schedule` (gain-scheduled circuits, 16 and 64 hidden units, 10 seeds each, and the energy check), `export` (JSON, SPICE subcircuits and their checks), `tables`, `figures`, `paper` (compiles `paper/main.pdf` and `paper/supplement.pdf` with Typst).
 The GRU8 baseline results must be computed first (see Data).
 
 ## Using the model
