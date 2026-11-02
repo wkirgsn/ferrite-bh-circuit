@@ -9,7 +9,7 @@ recurrence, with a fused GPU kernel in Triton for the time loop. The classical c
 material. Its element values can be gain-scheduled with a small MLP per material, which sets them at every step from
 the excitation, while the hysteresis memory stays in the states of the circuit.
 
-![Average 95th-percentile SRE and energy error of the 33 challenge entries and the circuits on the five final-evaluation materials of MC2](paper/fig/ranking.png)
+![Average 95th-percentile SRE and energy error of the 33 challenge entries and the circuits on the five final-evaluation materials of MC2](paper/fig/ranking.svg)
 
 On the 15 materials of MC2:
 
@@ -44,7 +44,7 @@ The classical circuit can be read: measurement and material parameters separate,
 ODE that can be evaluated at any time step, and it has an exact equivalent circuit of positive inductors, resistors
 and diode-bridge sliders plus controlled sources, which reproduces it in SPICE:
 
-![Equivalent circuit: current sense and measurement chain, reversible curve, six viscous plays and two relaxations behind feedback sources; in the scheduled circuits an MLP sets the element values at every step](paper/fig/circuit.png)
+![Equivalent circuit: current sense and measurement chain, reversible curve, six viscous plays and two relaxations behind feedback sources; in the scheduled circuits an MLP sets the element values at every step](paper/fig/circuit.svg)
 
 ## Repository
 

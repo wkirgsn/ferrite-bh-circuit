@@ -13,7 +13,7 @@ from mc2lib import ROOT
 
 INK, MUTED, GRID = "#0b0b0b", "#8a8984", "#e4e3df"
 OURS, RHINO = "#eb6834", "#2a78d6"                    # categorical slots as in the other figures (this work orange)
-plt.rcParams.update({"font.size": 7, "font.family": "serif", "axes.linewidth": 0.5, "xtick.major.width": 0.5,
+plt.rcParams.update({"svg.hashsalt": "ranking", "font.size": 7, "font.family": "serif", "axes.linewidth": 0.5, "xtick.major.width": 0.5,
                      "ytick.major.width": 0.5, "axes.spines.top": False, "axes.spines.right": False,
                      "xtick.color": MUTED, "ytick.color": MUTED, "xtick.labelcolor": INK, "ytick.labelcolor": INK})
 TOP = 16                                              # best half of the 32 contenders per metric (official ranking)
@@ -61,4 +61,4 @@ for ax, col, rcol, key, xlab in ((axs[0], "Average 95% Sequence Error", "Sequenc
     ax.grid(True, which="major", color=GRID, lw=0.4); ax.set_axisbelow(True)
     ax.set_xlabel(xlab); ax.set_ylabel("parameters per material")
     adjust_text(texts, ax=ax, expand=(1.15, 1.4), arrowprops=dict(arrowstyle="-", color=GRID, lw=0.4))
-fig.savefig(ROOT / "paper/fig/ranking.pdf", metadata={"CreationDate": None}); fig.savefig(ROOT / "paper/fig/ranking.png", dpi=200)
+fig.savefig(ROOT / "paper/fig/ranking.pdf", metadata={"CreationDate": None}); fig.savefig(ROOT / "paper/fig/ranking.svg", metadata={"Date": None}, facecolor="white")
