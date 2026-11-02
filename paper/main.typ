@@ -463,8 +463,7 @@ error (1.93 %, level with Fuzhou at 1.91 %); with 64 hidden units (5552 paramete
 ten seeds each). Only Hefei, with about 6600 parameters per material, is more accurate by both metrics. Its lead over
 the MLP64-scheduled circuit in the SRE (9.2 % vs 12.1 %) is spread over all five materials, 2.2 to 4.0 percentage
 points each, most on 3C95 and FEC014; in the energy error (1.57 % vs 1.62 %), the scheduled circuit is ahead on
-FEC007 (2.2 % vs 3.7 %) and behind on the other four by 0.2 to 0.8 points. The official results are not resolved by
-scenario.
+FEC007 (2.2 % vs 3.7 %) and behind on the other four by 0.2 to 0.8 points.
 
 The GRU remains better on three materials, for different reasons. On N87 the model is behind only with the short
 warm-up (9.6 % vs 7.8 % at $k = 100$) and at 50 and 80 kHz, where the excitation reaches deep saturation and the single
