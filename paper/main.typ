@@ -460,7 +460,11 @@ the same 12 materials (18.78 % vs 21.06 %). The energy error is the weaker side:
 With 32 parameters per material, the classical circuit is smaller than every submitted model, the smallest of which had 83 (@fig:ranking), and its average 95th-percentile SRE on the official test set is on par with that of the challenge winner RHINO-MAG (19.4 % vs 20.4 %).
 Gain-scheduled with 16 hidden units (656 parameters), it would rank third by both the SRE (13.0 %) and the energy
 error (1.93 %, level with Fuzhou at 1.91 %); with 64 hidden units (5552 parameters), second by both (12.1 % and 1.62 %;
-ten seeds each). Only Hefei, with about 6600 parameters per material, is more accurate by both metrics.
+ten seeds each). Only Hefei, with about 6600 parameters per material, is more accurate by both metrics. Its lead over
+the MLP64-scheduled circuit in the SRE (9.2 % vs 12.1 %) is spread over all five materials, 2.2 to 4.0 percentage
+points each, most on 3C95 and FEC014; in the energy error (1.57 % vs 1.62 %), the scheduled circuit is ahead on
+FEC007 (2.2 % vs 3.7 %) and behind on the other four by 0.2 to 0.8 points. The official results are not resolved by
+scenario.
 
 The GRU remains better on three materials, for different reasons. On N87 the model is behind only with the short
 warm-up (9.6 % vs 7.8 % at $k = 100$) and at 50 and 80 kHz, where the excitation reaches deep saturation and the single
