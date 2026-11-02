@@ -129,6 +129,8 @@ The GRU8 baseline results must be computed first (see Data).
 
 ## Using the model
 
+### NumPy
+
 The classical circuit with NumPy only (see `AGENTS.md` for conventions and pitfalls):
 
 ```python
@@ -147,16 +149,41 @@ For example, the MC2 test windows of a material at once:
 H = fb.predict("N87", B, H_warmup, T=T)       # B (N, 1000), H_warmup (N, 500), T (N,) -> H (N, 1000)
 ```
 
+Or use the command line (B and H as one column each, in T and A/m at 16 MHz):
+
 ```
-python -m ferrite_bh simulate N87 --T 25 --B b.csv --out h.csv
+python -m ferrite_bh list                                            # materials with their test errors
+python -m ferrite_bh simulate N87 --T 25 --B b.csv --out h.csv       # open loop from the demagnetized state
+python -m ferrite_bh predict N87 --T 25 --B b.csv --H h_warmup.csv   # MC2 setting
 ```
 
-- `ferrite_bh/params/<material>.json`: the 32 fitted parameters by name, with units and descriptions, plus the warm-up estimator, validity range and test errors.
-- `ferrite_bh/spice/<material>.lib`: the equivalent circuit of the material as a SPICE subcircuit, `X1 p n N87_core params: Tc=25 N=5 Ae=82.6e-6 le=0.08206`, with temperature as a parameter.
+The fitted parameters are also available as plain JSON, `ferrite_bh/params/<material>.json`: the 32 parameters by name, with units and descriptions, plus the warm-up estimator, validity range and test errors.
+The NumPy implementation reproduces the PyTorch model to 1e-4 % (`results/check_numpy.txt`).
 
-The NumPy implementation reproduces the PyTorch model to 1e-4 % (`results/check_numpy.txt`), the subcircuits the NumPy model to a median of 0.1 % (`results/check_spice_lib.txt`).
+### SPICE
 
-With PyTorch, all three circuits through the same call (GPU if available; NumPy arrays or tensors, one window or a batch as above):
+`ferrite_bh/spice/<material>.lib` holds the equivalent circuit of each material as a SPICE subcircuit with two terminals, the winding of a core: the voltage across them is $N A_e \, \mathrm{d}B/\mathrm{d}t$, the current into the first terminal is $H l_e / N$.
+Temperature `Tc` in °C, the number of turns `N`, the effective cross-section `Ae` in m² and the effective path length `le` in m are parameters of the subcircuit.
+It models the material only, without the measurement correction and lag of the MC2 test bench, as `fb.simulate(..., material_only=True)`.
+For example, with ngspice, the MC2 specimen of N87 driven by a sinusoidal winding voltage (0.1 T peak at 100 kHz):
+
+```
+* N87, R34.0x20.5x12.5 core with 5 turns
+.include ferrite_bh/spice/N87.lib
+V1 p 0 SIN(0 25 100k 0 0 90)
+X1 p 0 N87_core params: Tc=25 N=5 Ae=82.6e-6 le=0.08206
+.options method=gear
+.tran 15.625n 50u 0 15.625n uic
+.end
+```
+
+`uic` starts the simulation from the demagnetized state (all inductor currents zero) instead of a DC operating point.
+Time steps of at most 62.5 ns / 4 and `method=gear` are recommended.
+The subcircuits match the NumPy circuit to a median of 0.1 % (`results/check_spice_lib.txt`); `python -m ferrite_bh spice` regenerates them from the JSON parameters.
+
+### PyTorch
+
+All three circuits through the same call as `fb.predict` (GPU if available; NumPy arrays or tensors, one window or a batch as above):
 
 ```python
 import ferrite_bh as fb

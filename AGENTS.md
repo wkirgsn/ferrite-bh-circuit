@@ -66,7 +66,8 @@ python -m ferrite_bh spice N87                                   # regenerate th
 X1 p n N87_core params: Tc=25 N=5 Ae=82.6e-6 le=0.08206    * the MC2 N87 specimen, R34.0x20.5x12.5
 ```
 
-V(p, n) = N Ae dB/dt; the current into p is H le / N. Start the simulation at B = 0 (demagnetized). The circuit:
+V(p, n) = N Ae dB/dt; the current into p is H le / N. Start the simulation at B = 0 (demagnetized): `.tran ... uic`
+(no DC operating point; a source that is non-zero at t = 0 otherwise fails with a singular matrix). The circuit:
 reversible curve as a nonlinear inductor, six plays (inductor + viscous Coulomb slider), two relaxations (inductor +
 resistor), each behind a feedback source gamma_k dH/dt. Small time steps (≤ 62.5 ns / 4) and `method=gear` are
 recommended.
