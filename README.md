@@ -2,6 +2,29 @@
 
 Code, trained models and results of the paper (Wilhelm Kirchgässner, 2026; arXiv link follows).
 
+An equivalent circuit of the $B$–$H$ behavior of power ferrites is designed from classical elements of hysteresis
+modeling, discretized, and fitted to the measured transients of the
+[MagNet Challenge 2](https://github.com/minjiechen/magnetchallenge-2) (MC2) data set by gradient descent through the
+recurrence, with a fused GPU kernel in Triton for the time loop. The classical circuit has 32 parameters per
+material. Its element values can be gain-scheduled with a small MLP per material, which sets them at every step from
+the excitation, while the hysteresis memory stays in the states of the circuit.
+
+![Average 95th-percentile SRE and energy error of the 33 challenge entries and the circuits on the five final-evaluation materials of MC2](paper/fig/ranking.png)
+
+On the 15 materials of MC2:
+
+| | parameters per material | mean test SRE (%) | official p95 SRE / energy error (%) |
+|---|---:|---:|---:|
+| RHINO-MAG GRU8 (challenge winner) | 336 | 7.77 | 20.4 / 3.4 |
+| classical circuit (10 training seeds) | 32 | 7.33 ± 0.03 | 19.4 / 5.1 |
+| MLP16-scheduled circuit (5 seeds) | 656 | 5.25 ± 0.04 | 13.0 / 1.9 |
+| MLP64-scheduled circuit (5 seeds) | 5552 | 4.80 ± 0.03 | 12.1 / 1.6 |
+
+The MLP64-scheduled circuit would rank second of 33 in the challenge by both metrics. All circuits additionally use
+the 33 parameters per material of the warm-up state estimator.
+
+## Model
+
 The classical circuit, a 32-parameter model built only from classical elements of hysteresis modeling, predicts the
 field strength $H$ from the flux density $B$ of power ferrites under arbitrary excitation:
 
@@ -13,22 +36,9 @@ field strength $H$ from the flux density $B$ of power ferrites under arbitrary e
 - two linear relaxation states (magnetic after-effect),
 - a mean-field feedback of $H$ into every operator, as in the moving Preisach and Jiles–Atherton models.
 
-All coefficients are at most linear in temperature. The parameters are fitted jointly to measured transients by
-gradient descent through the recurrence, with a fused Triton kernel for the time loop. In the gain-scheduled circuit,
-a small MLP per material sets the element values at every step from the excitation, while the hysteresis memory stays
-in the states of the circuit.
-
-On the 15 materials of the [MagNet Challenge 2](https://github.com/minjiechen/magnetchallenge-2) (MC2):
-
-| | parameters per material | mean test SRE (%) | official p95 SRE / energy error (%) |
-|---|---:|---:|---:|
-| RHINO-MAG GRU8 (challenge winner) | 336 | 7.77 | 20.4 / 3.4 |
-| classical circuit (10 training seeds) | 32 | 7.33 ± 0.03 | 19.4 / 5.1 |
-| MLP16-scheduled circuit (5 seeds) | 656 | 5.25 ± 0.04 | 13.0 / 1.9 |
-| MLP64-scheduled circuit (5 seeds) | 5552 | 4.80 ± 0.03 | 12.1 / 1.6 |
-
-The MLP64-scheduled circuit would rank second of 33 in the challenge by both metrics. All circuits additionally use
-the 33 parameters per material of the warm-up state estimator.
+All coefficients are at most linear in temperature. The scheduled circuits keep this structure: per material, an
+MLP with 16 or 64 hidden units maps the excitation at each step to the reversible curve, the hysteresis gain and the
+operator dynamics (play widths and feedback gains), and it is trained jointly with the 32 circuit parameters.
 
 The classical circuit can be read: measurement and material parameters separate, the material part is a discretized
 ODE that can be evaluated at any time step, and it has an exact equivalent circuit of positive inductors, resistors

@@ -6,3 +6,4 @@ data/
 *.npy
 paper/*.pdf
 paper/fig/*.png
+!paper/fig/ranking.png
