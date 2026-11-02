@@ -2,7 +2,7 @@
 
 Code, trained models and results of the paper (Wilhelm Kirchgässner, 2026; arXiv link follows).
 
-An equivalent circuit of the $B$–$H$ behavior of power ferrites is designed from classical elements of hysteresis modeling, discretized, and fitted to the measured transients of the [MagNet Challenge 2](https://github.com/minjiechen/magnetchallenge-2) (MC2) data set by gradient descent through the recurrence, with a fused GPU kernel in [Triton](https://github.com/triton-lang/triton) for the time loop.
+An equivalent circuit of the $BH$ behavior of power ferrites is designed from classical elements of hysteresis modeling, discretized, and fitted to the measured transients of the [MagNet Challenge 2](https://github.com/minjiechen/magnetchallenge-2) (MC2) data set by gradient descent through the recurrence, with a fused GPU kernel in [Triton](https://github.com/triton-lang/triton) for the time loop.
 The classical circuit has 32 parameters per material.
 Its element values can be gain-scheduled with a small MLP per material, which sets them at every step from the excitation, while the hysteresis memory stays in the states of the circuit.
 
