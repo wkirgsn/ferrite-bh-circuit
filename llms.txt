@@ -14,6 +14,6 @@ Units: B in T, H in A/m, temperature in degC, sample period 62.5 ns (16 MHz). Tr
 
 ## Paper and reproduction
 - [README.md](README.md): overview, setup, data, reproduction
-- [paper/main.typ](paper/main.typ): paper source
+- [paper/main.typ](paper/main.typ): paper source (sections in [paper/sections/](paper/sections/))
 - [src/compact_m.py](src/compact_m.py): PyTorch model and training
 - [scripts/reproduce.sh](scripts/reproduce.sh): every experiment, table and figure
