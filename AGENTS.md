@@ -46,6 +46,8 @@ k < 50 the amplitude factors of the warm-up estimator are skipped.
 The trained PyTorch circuits (classical, MLP16- and MLP64-scheduled) have the same `predict` call:
 `from circuit import Circuit; Circuit("mlp64").predict("N87", B, H_warmup, T)` from `src/` (needs PyTorch).
 
+Tests: `uv run --group dev pytest` (synthetic inputs, no data; GPU and ngspice tests skip when unavailable).
+
 ## Command line
 
 ```

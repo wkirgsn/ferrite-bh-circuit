@@ -34,5 +34,9 @@ explicit = true
 [dependency-groups]
 dev = [
     "pymupdf>=2.0",
+    "pytest>=9.2.0",
     "typst>=0.15.0",
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,16 +1,18 @@
-"""Extrapolation / data-efficiency table: law (compact_m checkpoint) and GRU8 replica (train_gru_multi checkpoint, or
-"-" for the law only), both trained on the same slots "<mat>" (full data) and "<mat>#<spec>" (restricted training).
+"""Extrapolation / data-efficiency table: law (compact_m checkpoint, or a scheduled circuit of hyper_m.py) and GRU8
+replica (train_gru_multi checkpoint, or "-" for the law only), both trained on the same slots "<mat>" (full data) and
+"<mat>#<spec>" (restricted training).
 Per restricted slot: test SRE (mean over the three scenarios) on the test windows outside the training restriction
 (mc2lib.ood_mask; all windows for frac specs), next to the full-data model of the same material on the same windows.
 Usage: python ood_eval.py <law ckpt> <law variant> <gru ckpt|->   -> results/ood_<law>_<gru>.json"""
 import sys, json, numpy as np, torch
 from mc2lib import windows, select_k, SCENARIOS, ood_mask, ROOT
-from compact_m import CompactM, DEV
+from compact_m import DEV
+from loader import load
 from train_gru_multi import MultiGRU, gru_predict
 
 lck, lvar, gck = sys.argv[1:4]
-ck = torch.load(ROOT / f"models/{lck}.pt", map_location=DEV)
-law = CompactM(ck["variants"], len(ck["mats"]), ck["M"], ck["J"]).to(DEV); law.load_state_dict(ck["sd"], strict=False)
+law, names, mats = load(lck); law.eval()                               # classical circuit or scheduled (hyper_m) checkpoint
+ck = {"names": names, "mats": mats}
 e = ck["names"].index(lvar)
 models = {"law": ck["mats"]}
 if gck != "-":
