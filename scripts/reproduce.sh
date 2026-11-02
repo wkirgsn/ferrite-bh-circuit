@@ -65,9 +65,9 @@ step_export() {    # ferrite_bh: parameters as JSON, SPICE subcircuits, checked 
 
 step_schedule() {  # gain-scheduled circuits (needs step_final): per-material MLP with 16 or 64 hidden units sets the
                    # element values at every step, trained jointly with the 32 parameters on the backbone of each
-                   # classical seed, 20000 steps; seeds 0-4 (~1 h each); then the energy check of the MLP16 seed 0
+                   # classical seed, 20000 steps; seeds 0-9 (~1 h / ~1.7 h each); then the energy check of the MLP16 seed 0
   for h in 16 64; do
-    for s in 0 1 2 3 4; do
+    for s in 0 1 2 3 4 5 6 7 8 9; do
       local init=nere:final_e1 name=hyAB${h}j_s$s; [ $s -gt 0 ] && init=ne_s$s:final_e1
       [ $h = 16 ] && [ $s = 0 ] && name=hyAB16j_long
       uv run python hyper_m.py --init $init --opt AB --hidden $h --bs 256 --accum 2 --joint --seed $s --steps 20000 \

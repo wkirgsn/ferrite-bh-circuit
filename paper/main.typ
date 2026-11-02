@@ -15,7 +15,7 @@
     All elements are positive apart from the feedback sources, and the circuit can run in SPICE.
     Discretized at the sampling step, the circuit is a difference equation with 32 parameters per material, fitted by backpropagation through time.
     On the 15 materials of the MagNet Challenge 2, the mean sequence relative error is 7.33 ± 0.03 % against 7.77 % for the challenge-winning recurrent network with 336 parameters, and the circuit is more accurate on 12 of the 15 materials.
-    The accuracy can be scaled up by gain scheduling, where a small network per material sets the element values at every step from the excitation, while the hysteresis memory stays in the circuit, such that the error drops to 5.25 % with 656 parameters per material.
+    The accuracy can be scaled up by gain scheduling, where a small network per material sets the element values at every step from the excitation, while the hysteresis memory stays in the circuit, such that the error drops to 5.27 % with 656 parameters per material.
     Thus, an interpretable model is demonstrated that achieves state-of-the-art accuracy.
   ],
   authors: (
@@ -445,7 +445,7 @@ the network and $2 dot 10^(-3)$ for the 32 circuit parameters; one run of all 15
 #figure(
   image("fig/ranking.pdf", width: 100%),
   placement: top, scope: "parent",
-  caption: [The classical and the gain-scheduled circuits among the contestants of the MagNet Challenge 2: parameters per material over the average 95th percentile of the SRE (left) and of the energy error (right) on the official test set of the five final-evaluation materials; contestants from the official results, the better half by each metric shown (energy error: up to 10 %). Circuits: mean and range over the training seeds (classical: ten, scheduled: five); scheduled circuits with 16 or 64 hidden units.],
+  caption: [The classical and the gain-scheduled circuits among the contestants of the MagNet Challenge 2: parameters per material over the average 95th percentile of the SRE (left) and of the energy error (right) on the official test set of the five final-evaluation materials; contestants from the official results, the better half by each metric shown (energy error: up to 10 %). Circuits: mean and range over the training seeds (ten each); scheduled circuits with 16 or 64 hidden units.],
 ) <fig:ranking>
 
 @tab:main compares the classical circuit (32 parameters, passive, with measurement lag) with the published GRU8 models of
@@ -458,9 +458,9 @@ the same 12 materials (18.78 % vs 21.06 %). The energy error is the weaker side:
 0.73 %, better on 8 of the 15 materials, with most of the difference on 3C92 (95th percentile 10.7 % vs 3.8 %).
 
 With 32 parameters per material, the classical circuit is smaller than every submitted model, the smallest of which had 83 (@fig:ranking), and its average 95th-percentile SRE on the official test set is on par with that of the challenge winner RHINO-MAG (19.4 % vs 20.4 %).
-Gain-scheduled with 16 hidden units (656 parameters), it would rank third by the SRE (13.0 %) and second by the
-energy error (1.91 %, level with Fuzhou); with 64 hidden units (5552 parameters), second by both (12.1 % and 1.61 %;
-five seeds each). Only Hefei, with about 6600 parameters per material, is more accurate by both metrics.
+Gain-scheduled with 16 hidden units (656 parameters), it would rank third by both the SRE (13.0 %) and the energy
+error (1.93 %, level with Fuzhou at 1.91 %); with 64 hidden units (5552 parameters), second by both (12.1 % and 1.62 %;
+ten seeds each). Only Hefei, with about 6600 parameters per material, is more accurate by both metrics.
 
 The GRU remains better on three materials, for different reasons. On N87 the model is behind only with the short
 warm-up (9.6 % vs 7.8 % at $k = 100$) and at 50 and 80 kHz, where the excitation reaches deep saturation and the single
@@ -473,10 +473,10 @@ per frequency, the saturation knee is poorly determined at 70 °C. On FEC014 it 
 #include "tables/schedule.typ"
 
 @tab:schedule compares the scheduled circuits with the classical one. With 16 hidden units, the mean test SRE is
-5.25 ± 0.04 % (five seeds), 28 % below the classical circuit and 32 % below the GRU, and the mean NERE drops from
-0.82 % to 0.45 %; with 64 hidden units, the SRE is 4.80 ± 0.03 % and the NERE 0.39 % (five seeds). On the official
-test set, the average 95th-percentile SRE falls from 19.4 % to 13.0 ± 0.2 % and 12.1 ± 0.1 %, and the energy error
-from 5.1 % to 1.9 ± 0.1 % and 1.61 ± 0.01 %.
+5.27 ± 0.04 % (ten seeds), 28 % below the classical circuit and 32 % below the GRU, and the mean NERE drops from
+0.82 % to 0.45 %; with 64 hidden units, the SRE is 4.81 ± 0.02 % and the NERE 0.39 % (ten seeds). On the official
+test set, the average 95th-percentile SRE falls from 19.4 % to 13.0 ± 0.1 % and 12.1 ± 0.1 %, and the energy error
+from 5.1 % to 1.9 ± 0.1 % and 1.62 ± 0.02 %.
 
 
 The schedule acts mainly at the reversals of $B$: on 3C94 and N87, for example, the play rate
@@ -558,7 +558,7 @@ measured field strength. With 32 parameters per material it is more accurate tha
 7.77 %) and better on 12 of 15 materials. It can be read: its parameters separate into the acquisition and the
 material, it revealed a lag in the measurement of the field strength, and its material part is valid at any time step
 and runs in circuit simulation. Gain-scheduled by small networks that set its element values from the excitation, it
-reaches 5.25 % with 656 parameters per material and 4.80 % with 5552, which would rank second of 33 in the challenge
+reaches 5.27 % with 656 parameters per material and 4.81 % with 5552, which would rank second of 33 in the challenge
 by both metrics.
 
 The code (PyTorch with the fused Triton kernel), the fitted parameters of all materials with a NumPy implementation

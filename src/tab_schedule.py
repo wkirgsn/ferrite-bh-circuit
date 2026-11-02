@@ -6,7 +6,7 @@ from mc2lib import ROOT
 from runlog import table
 
 SEEDS = lambda base, first, n=10: [first] + [f"{base}_s{s}" for s in range(1, n)]
-NSCHED = 5  # seeds of the scheduled circuits used (0 .. NSCHED-1), e.g. 5 for arXiv v1
+NSCHED = 10  # seeds of the scheduled circuits used (0 .. NSCHED-1): 5 in arXiv v1, 10 since v2
 ROWS = [  # (label, h, names, variant): classical circuit and the scheduled circuits (option AB, joint, 20000 steps)
     ("classical", "–", SEEDS("ne", "nere"), "final_e1"),
     ("MLP16-scheduled", 16, SEEDS("hyAB16j", "hyAB16j_long", NSCHED), "final_e1+hyperAB16j"),

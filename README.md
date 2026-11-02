@@ -14,8 +14,8 @@ On the 15 materials of MC2:
 |---|---:|---:|---:|
 | RHINO-MAG GRU8 (challenge winner) | 336 | 7.77 | 20.4 / 3.4 |
 | classical circuit (10 training seeds) | 32 | 7.33 ± 0.03 | 19.4 / 5.1 |
-| MLP16-scheduled circuit (5 seeds) | 656 | 5.25 ± 0.04 | 13.0 / 1.9 |
-| MLP64-scheduled circuit (5 seeds) | 5552 | 4.80 ± 0.03 | 12.1 / 1.6 |
+| MLP16-scheduled circuit (10 seeds) | 656 | 5.27 ± 0.04 | 13.0 / 1.9 |
+| MLP64-scheduled circuit (10 seeds) | 5552 | 4.81 ± 0.02 | 12.1 / 1.6 |
 
 The MLP64-scheduled circuit would rank second of 33 in the challenge by both metrics.
 All circuits additionally use the 33 parameters per material of the warm-up state estimator.
@@ -120,11 +120,11 @@ They are not included; `src/eval_rhino.py` computes them from the published RHIN
 ## Reproducing the paper
 
 ```
-scripts/reproduce.sh                 # everything, about 25 GPU hours on one AMD RX 9070 XT
+scripts/reproduce.sh                 # everything, about 37 GPU hours on one AMD RX 9070 XT
 scripts/reproduce.sh tables figures  # only the tables and figures, from the included results and checkpoints
 ```
 
-Steps: `final` (classical circuit and energy-error weights, 10 seeds), `path` (smaller models, 10 seeds of the 31- and 27-parameter variants), `ablation`, `ood` (extrapolation and data efficiency, with a GRU8 replica), `transfer` (MC2 → MC1 specimens), `checks` (SPICE, step size, Kalman filter), `schedule` (gain-scheduled circuits, 16 and 64 hidden units, 5 seeds each, and the energy check), `export` (JSON, SPICE subcircuits and their checks), `tables`, `figures`, `paper` (compiles `paper/main.pdf` and `paper/supplement.pdf` with Typst).
+Steps: `final` (classical circuit and energy-error weights, 10 seeds), `path` (smaller models, 10 seeds of the 31- and 27-parameter variants), `ablation`, `ood` (extrapolation and data efficiency, with a GRU8 replica), `transfer` (MC2 → MC1 specimens), `checks` (SPICE, step size, Kalman filter), `schedule` (gain-scheduled circuits, 16 and 64 hidden units, 10 seeds each, and the energy check), `export` (JSON, SPICE subcircuits and their checks), `tables`, `figures`, `paper` (compiles `paper/main.pdf` and `paper/supplement.pdf` with Typst).
 The GRU8 baseline results must be computed first (see Data).
 
 ## Using the model

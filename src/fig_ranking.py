@@ -3,7 +3,7 @@ contenders (official results, results/mc2_official_results.xlsx): parameters per
 95th-percentile sequence error and energy error on the five final-evaluation materials, as in the challenge's ranking
 plot. Classical circuit: final model; MLP16- / MLP64-scheduled circuit: hyper_m.py, option AB, joint training. All:
 official_eval.py on the official test set, mean and range over training seeds (until the seeds of a scheduled circuit
-are complete, the available ones; NSCHED limits them to the first seeds, e.g. 5 for arXiv v1).
+are complete, the available ones; NSCHED limits them to the first seeds: 5 in arXiv v1, 10 since v2).
 RHINO-MAG GRU8 (team SiegenPaderborn) is shown at its official position. Contestants above NERE_MAX are not shown.
 Usage: python fig_ranking.py   -> paper/fig/ranking.pdf"""
 import glob, json, numpy as np, pandas as pd, matplotlib, matplotlib.ticker
@@ -22,7 +22,7 @@ NERE_MAX = 10.0                                       # energy-error panel: cont
 rk = pd.read_excel(ROOT / "results/mc2_official_results.xlsx", "Ranking")
 avg = lambda fs: [json.load(open(f))["average"] for f in fs]
 R = lambda pat: sorted(glob.glob(str(ROOT / "results" / pat)))
-NSCHED = 5                                            # seeds of the scheduled circuits used (0 .. NSCHED-1)
+NSCHED = 10                                           # seeds of the scheduled circuits used (0 .. NSCHED-1)
 S = lambda base, first, var: R(f"official_{first}_{var}.json") + sum((R(f"official_{base}_s{i}_{var}.json") for i in range(1, NSCHED)), [])
 ours = [  # (label, parameters per material, official averages of all seeds, marker)
     ("classical circuit", 32, avg(R("official_nere_final_e1.json") + R("official_ne_s*_final_e1.json")), "o"),
@@ -45,12 +45,12 @@ for ax, col, rcol, key, xlab in ((axs[0], "Average 95% Sequence Error", "Sequenc
             continue
         ax.scatter(x, y, s=10, color=MUTED, zorder=2, lw=0)
         texts.append(ax.text(x, y, r["Team"], fontsize=6, color=MUTED))
-    xs = [np.mean([o[key] for o in a]) for _, _, a, _ in ours]
+    xs = [np.mean([o[key] for o in a]) for _, _, a, _ in ours]; marks = []
     ax.plot(xs, [n for _, n, _, _ in ours], ls="--", lw=0.8, color=OURS, alpha=0.5, zorder=3)   # classical -> MLP16 -> MLP64
     for (lab, npar, a, mk), x in zip(ours, xs):
         v = np.array([o[key] for o in a])
-        ax.errorbar(x, npar, xerr=[[x - v.min()], [v.max() - x]], fmt=mk, ms=5 if mk == "o" else 4.5, color=OURS, ecolor=OURS,
-                    elinewidth=0.8, capsize=2, zorder=5)
+        marks.append(ax.errorbar(x, npar, xerr=[[x - v.min()], [v.max() - x]], fmt=mk, ms=5 if mk == "o" else 4.5, color=OURS,
+                                 ecolor=OURS, elinewidth=0.8, capsize=2, zorder=5)[0])
         off, ha = ((6, 3) if npar == 656 else (6, -3)), "left"        # fixed, right of the marker (free area)
         ax.annotate(lab, (x, npar), xytext=off, textcoords="offset points", ha=ha, va="bottom" if off[1] > 0 else "top",
                     fontsize=6.5, color=INK, fontweight="bold")
@@ -60,5 +60,5 @@ for ax, col, rcol, key, xlab in ((axs[0], "Average 95% Sequence Error", "Sequenc
     ax.set_xticks(ticks); ax.set_xticklabels([f"{t:g}" for t in ticks]); ax.xaxis.set_minor_formatter(matplotlib.ticker.NullFormatter())
     ax.grid(True, which="major", color=GRID, lw=0.4); ax.set_axisbelow(True)
     ax.set_xlabel(xlab); ax.set_ylabel("parameters per material")
-    adjust_text(texts, ax=ax, expand=(1.15, 1.4), arrowprops=dict(arrowstyle="-", color=GRID, lw=0.4))
+    adjust_text(texts, ax=ax, objects=marks, expand=(1.15, 1.4), arrowprops=dict(arrowstyle="-", color=GRID, lw=0.4))   # clear of the circuits
 fig.savefig(ROOT / "paper/fig/ranking.pdf", metadata={"CreationDate": None}); fig.savefig(ROOT / "paper/fig/ranking.svg", metadata={"Date": None}, facecolor="white")
