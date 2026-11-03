@@ -1,6 +1,6 @@
 # A Data-Driven, Gain-Scheduled Equivalent Circuit for the B–H Behavior of Power Ferrites
 
-Code, trained models and results of the paper (Wilhelm Kirchgässner, 2026; arXiv link follows).
+Code, trained models and results of the paper (Wilhelm Kirchgässner, 2026; [arXiv paper](https://arxiv.org/abs/2611.02222)).
 
 An equivalent circuit of the $BH$ behavior of power ferrites is designed from classical elements of hysteresis modeling, discretized, and fitted to the measured transients of the [MagNet Challenge 2](https://github.com/minjiechen/magnetchallenge-2) (MC2) data set by gradient descent through the recurrence, with a fused GPU kernel in [Triton](https://github.com/triton-lang/triton) for the time loop.
 The classical circuit has 32 parameters per material.
