@@ -204,10 +204,13 @@ The measurement data are subject to the terms of the MagNet Challenge.
 ## Citation
 
 ```bibtex
-@misc{kirchgaessner2026circuit,
-  author = {Kirchg{\"a}ssner, Wilhelm},
-  title  = {A Data-Driven, Gain-Scheduled Equivalent Circuit for the {$B$--$H$} Behavior of Power Ferrites},
-  year   = {2026},
-  note   = {arXiv preprint}
+@misc{kirchgässner2026datadrivengainscheduledequivalentcircuit,
+      title={A Data-Driven, Gain-Scheduled Equivalent Circuit for the B-H Behavior of Power Ferrites}, 
+      author={Wilhelm Kirchgässner},
+      year={2026},
+      eprint={2611.02222},
+      archivePrefix={arXiv},
+      primaryClass={eess.SY},
+      url={https://arxiv.org/abs/2611.02222}, 
 }
 ```
