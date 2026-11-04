@@ -10,8 +10,7 @@ Its element values can be gain-scheduled with a small MLP per material, which se
 
 <img src="paper/fig/ranking.svg" width="100%" alt="Average 95th-percentile SRE and energy error of the 33 challenge entries and the circuits on the five final-evaluation materials of MC2">
 
-SRE is the sequence relative error, the RMS error of the predicted $H$ relative to the RMS of the measured $H$ over the predicted part of a window.
-NERE is the normalized energy relative error, the error of the energy $\int H\,\mathrm{d}B$ over the predicted part; the challenge normalizes it by the core loss of the recording (the energy error in the figure and the table).
+SRE is the sequence relative error, NERE is the normalized energy relative error.
 The challenge ranked the entries by the 95th percentile (p95) of both, averaged over the three warm-up lengths and the five final-evaluation materials.
 
 On the 15 materials of MC2:
