@@ -8,6 +8,10 @@ Its element values can be gain-scheduled with a small MLP per material, which se
 
 <img src="paper/fig/ranking.svg" width="100%" alt="Average 95th-percentile SRE and energy error of the 33 challenge entries and the circuits on the five final-evaluation materials of MC2">
 
+SRE is the sequence relative error, the RMS error of the predicted $H$ relative to the RMS of the measured $H$ over the predicted part of a window.
+NERE is the normalized energy relative error, the error of the energy $\int H\,\mathrm{d}B$ over the predicted part; the challenge normalizes it by the core loss of the recording (the energy error in the figure and the table).
+The challenge ranked the entries by the 95th percentile (p95) of both, averaged over the three warm-up lengths and the five final-evaluation materials.
+
 On the 15 materials of MC2:
 
 | | parameters per material | mean test SRE (%) | official p95 SRE / energy error (%) |
@@ -76,25 +80,6 @@ uv sync
 The lock file pins PyTorch for NVIDIA GPUs (CUDA 12.8, with Triton).
 The results of the paper were computed on an AMD GPU with ROCm 6.4; for that, follow the comment in `pyproject.toml` before `uv sync`.
 Without a GPU the model runs on the plain PyTorch reference of the kernel: evaluation and all tables and figures work, training is impractically slow.
-
-## Tests
-
-```
-uv run --group dev pytest
-```
-
-The tests need no measurement data; they run on synthetic excitation within about a minute:
-
-| file | checks |
-|---|---|
-| `tests/test_kernels.py` | the fused Triton kernels (constant and per-step coefficients) equal their PyTorch references, forward and backward (GPU only) |
-| `tests/test_numpy_vs_torch.py` | the NumPy package reproduces the trained PyTorch classical circuit for all 15 materials; the PyTorch API handles single windows, batches, arrays and tensors |
-| `tests/test_numpy_api.py` | passivity constraints of the fitted coefficients, positive loop energy in periodic steady state, odd symmetry, batching |
-| `tests/test_scheduled.py` | with the scheduling MLP switched off, the scheduled circuit is exactly the classical one; parameter counts 656 and 5552 |
-| `tests/test_spice.py` | the SPICE subcircuits match the NumPy circuit (skipped without ngspice; set `NGSPICE` to its path) |
-| `tests/test_metrics.py` | the challenge metrics SRE and NERE |
-
-The code passes `uv run --group dev ruff check` (configuration in `pyproject.toml`) and `uv run --group dev ty check`.
 
 ## Data
 
@@ -195,6 +180,25 @@ H = c.predict("N87", B, H_warmup, T=T)        # MC2 setting, as fb.predict
 
 `fb.Circuit(..., seed=s)` selects another training seed (`fb.seeds("mlp64")` lists the included ones); the checkpoints behind it are in `models/` (see `ferrite_bh/circuit.py`).
 `fb.Circuit` needs PyTorch; the NumPy functions above do not.
+
+## Tests
+
+```
+uv run --group dev pytest
+```
+
+The tests need no measurement data; they run on synthetic excitation within about a minute:
+
+| file | checks |
+|---|---|
+| `tests/test_kernels.py` | the fused Triton kernels (constant and per-step coefficients) equal their PyTorch references, forward and backward (GPU only) |
+| `tests/test_numpy_vs_torch.py` | the NumPy package reproduces the trained PyTorch classical circuit for all 15 materials; the PyTorch API handles single windows, batches, arrays and tensors |
+| `tests/test_numpy_api.py` | passivity constraints of the fitted coefficients, positive loop energy in periodic steady state, odd symmetry, batching |
+| `tests/test_scheduled.py` | with the scheduling MLP switched off, the scheduled circuit is exactly the classical one; parameter counts 656 and 5552 |
+| `tests/test_spice.py` | the SPICE subcircuits match the NumPy circuit (skipped without ngspice; set `NGSPICE` to its path) |
+| `tests/test_metrics.py` | the challenge metrics SRE and NERE |
+
+The code passes `uv run --group dev ruff check` (configuration in `pyproject.toml`) and `uv run --group dev ty check`.
 
 ## License
 
