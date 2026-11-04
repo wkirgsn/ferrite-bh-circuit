@@ -1,7 +1,7 @@
-"""README animation: one N87 test window with minor loops, traced in time and in the B-H plane. During the warm-up
+"""README animation: one test window with minor loops (python fig_gif.py N49 100 260 for the README), traced in time and in the B-H plane. During the warm-up
 (first k samples) H is measured and the circuit only follows; afterwards it predicts H from B and the temperature.
 Uses the classical circuit (32 parameters per material) on the CPU reference scan.
-Usage: python fig_gif.py [material] [k]   -> paper/fig/bh.gif"""
+Usage: python fig_gif.py [material] [k] [window] [out]   -> paper/fig/bh.gif"""
 import sys, numpy as np, torch, matplotlib
 matplotlib.use("Agg"); import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation, PillowWriter
@@ -12,6 +12,8 @@ from mc2lib import ROOT, windows, metrics
 
 MAT = sys.argv[1] if len(sys.argv) > 1 else "N87"
 K = int(sys.argv[2]) if len(sys.argv) > 2 else 100
+Q = int(sys.argv[3]) if len(sys.argv) > 3 else None                                # window index (else automatic)
+OUT = sys.argv[4] if len(sys.argv) > 4 else str(ROOT / "paper/fig/bh.gif")
 INK, MUTED, GRID, WARM, MEAS, CIRC = "#0b0b0b", "#6f6e69", "#e4e3de", "#efeeea", "#2a78d6", "#eb6834"
 
 ck = torch.load(ROOT / "models/nere.pt", map_location="cpu")
@@ -28,7 +30,7 @@ sre, _ = metrics(Hp, w["H"], w["B"], K)
 rev = (np.diff(np.sign(np.diff(w["B"], axis=1)), axis=1) != 0).sum(1)
 amp = np.ptp(w["B"], axis=1)
 cand = np.where((rev >= 6) & (rev <= 16) & (amp >= np.percentile(amp, 70)))[0]
-q = cand[np.argsort(sre[cand])[len(cand) // 2]]
+q = cand[np.argsort(sre[cand])[len(cand) // 2]] if Q is None else Q
 B, H, P, T = 1e3 * w["B"][q], w["H"][q], Hp[q], w["T"][q]
 print(f"{MAT} window {q}: {rev[q]} reversals, {T:.0f} °C, SRE {100 * sre[q]:.1f} %")
 t = np.arange(1000) / 16                                                              # µs (16 MHz sampling)
@@ -72,4 +74,4 @@ def draw(n):
 
 
 anim = FuncAnimation(fig, draw, frames=frames, blit=False)
-anim.save(ROOT / "paper/fig/bh.gif", writer=PillowWriter(fps=25))
+anim.save(OUT, writer=PillowWriter(fps=25))
