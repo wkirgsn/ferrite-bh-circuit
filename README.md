@@ -1,6 +1,6 @@
 # A Data-Driven, Gain-Scheduled Equivalent Circuit for the B–H Behavior of Power Ferrites
 
-<img src="paper/fig/bh.gif" width="100%" alt="Animation of an N49 test window driven into saturation: the measured H and the prediction of the classical circuit, over time and in the B-H plane, after a short warm-up in which H is measured">
+<img src="paper/fig/bh.gif" width="100%" alt="Animation of a 3E6 test window with nested minor loops: the measured H and the prediction of the classical circuit, over time and in the B-H plane, after a short warm-up in which H is measured">
 
 Code, trained models and results of the paper (Wilhelm Kirchgässner, 2026; [arXiv paper](https://arxiv.org/abs/2611.02222)).
 

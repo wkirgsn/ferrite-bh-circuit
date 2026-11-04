@@ -1,4 +1,4 @@
-"""README animation: one test window with minor loops (python fig_gif.py N49 100 260 for the README), traced in time and in the B-H plane. During the warm-up
+"""README animation: one test window with minor loops (python fig_gif.py 3E6 100 514 for the README), traced in time and in the B-H plane. During the warm-up
 (first k samples) H is measured and the circuit only follows; afterwards it predicts H from B and the temperature.
 Uses the classical circuit (32 parameters per material) on the CPU reference scan.
 Usage: python fig_gif.py [material] [k] [window] [out]   -> paper/fig/bh.gif"""
@@ -75,3 +75,12 @@ def draw(n):
 
 anim = FuncAnimation(fig, draw, frames=frames, blit=False)
 anim.save(OUT, writer=PillowWriter(fps=25))
+
+# shrink: one shared 16-color palette from the last frame, no dithering, frames stored as differences (~170 kB)
+from PIL import Image
+src = Image.open(OUT); fr = []
+for i in range(src.n_frames):
+    src.seek(i); fr.append(src.convert("RGB"))
+pal = fr[-1].quantize(16, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE)
+fr = [f.quantize(palette=pal, dither=Image.Dither.NONE) for f in fr]
+fr[0].save(OUT, save_all=True, append_images=fr[1:], duration=[40] * (len(fr) - 1) + [40 * HOLD], loop=0, optimize=True, disposal=1)
