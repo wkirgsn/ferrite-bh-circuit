@@ -16,7 +16,14 @@
    70.0
   ],
   "B_peak_max_T": 0.456,
-  "note": "trained on the MC2 measurements of this material (B_peak_max_T: largest |B| in its test windows); temperature dependence at most linear in t = (T - 50)/25"
+  "training_range": {
+   "T_min": 25.0,
+   "T_max": 70.0,
+   "B_max": 0.5284247994422913,
+   "dB_max": 0.005219370126724243,
+   "d2B_max": 0.0026336200535297394
+  },
+  "note": "trained on the MC2 measurements of this material (B_peak_max_T: largest |B| in its test windows); temperature dependence at most linear in t = (T - 50)/25; training_range: T and the maxima of |B| and of the per-sample |dB| and |d2B| over the training sequences, checked by the range warning"
  },
  "test_errors_percent": {
   "sre_mean": 6.45,

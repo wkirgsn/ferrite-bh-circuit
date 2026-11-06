@@ -14,13 +14,44 @@ The material model is everything except tau1, tau2 (measurement correction) and 
 simulate(..., material_only=True) for the true field of the material.
 predict() runs the warm-up estimator (observer, initial-state prior, amplitude factors) on the first k samples of a
 measured H, as in the MagNet Challenge 2; simulate() runs open-loop from given (default: demagnetized) states.
+Both emit an OutOfTrainingRangeWarning if the input leaves the training range of the material (validity.training_range
+of params/<material>.json): the prediction is then an extrapolation.
 """
 import json
+import warnings
 from pathlib import Path
 import numpy as np
 
 DT = 62.5e-9
 PARAMS = Path(__file__).parent / "params"
+
+
+class OutOfTrainingRangeWarning(UserWarning):
+    """The input leaves the range of the training data (temperature, |B|, per-sample slope or curvature of B)."""
+
+
+def check_range(rec, B, T, circuit="classical circuit", stacklevel=3):
+    """Warn (OutOfTrainingRangeWarning) if T, |B|, its per-sample slope |dB| or curvature |d2B| (16 MHz) leave the
+    training range of the material record rec. Returns the list of violations (empty if within range)."""
+    v = rec["validity"]["training_range"]
+    B = np.atleast_2d(np.asarray(B, float)); T = np.asarray(T, float)
+    out = []
+    if T.min() < v["T_min"] or T.max() > v["T_max"]:
+        out.append(f"T from {T.min():g} to {T.max():g} degC outside the trained {v['T_min']:g} to {v['T_max']:g} degC")
+    if np.abs(B).max() > v["B_max"]:
+        out.append(f"|B| up to {np.abs(B).max() / v['B_max']:.2f}x the training maximum of {v['B_max']:.3f} T")
+    if B.shape[1] > 1:
+        d1 = np.gradient(B, axis=1)
+        if np.abs(d1).max() > v["dB_max"]:
+            out.append(f"|dB/dt| up to {np.abs(d1).max() / v['dB_max']:.2f}x the training maximum of "
+                       f"{v['dB_max'] / DT:.3g} T/s (at 16 MHz sampling)")
+        if B.shape[1] > 2 and np.abs(np.gradient(d1, axis=1)).max() > v["d2B_max"]:
+            out.append(f"|d2B/dt2| up to {np.abs(np.gradient(d1, axis=1)).max() / v['d2B_max']:.2f}x the training maximum")
+    if out:
+        warnings.warn(f"Input for material {rec['material']} is outside the training range of the {circuit}: "
+                      + "; ".join(out) + ". The H prediction is an extrapolation.", OutOfTrainingRangeWarning,
+                      stacklevel=stacklevel)
+    return out
 
 
 def materials():
@@ -112,6 +143,7 @@ def predict(material, B, H_warmup, T, k=None):
     scalar or (N,). Returns H with the shape of B: the warm-up samples as measured (lagged), then the prediction.
     This is the MagNet Challenge 2 setting: the output is the field as measured by the MC2 test bench."""
     rec = load(material) if isinstance(material, str) else material
+    check_range(rec, B, T)
     one = np.ndim(B) == 1
     B = np.atleast_2d(np.asarray(B, float)); N, W = B.shape
     Hw = np.atleast_2d(np.asarray(H_warmup, float))
@@ -169,6 +201,7 @@ def simulate(material, B, T, states=None, material_only=True):
     correction and lag of the MC2 test bench. states: optional (8,) / (N, 8) initial play (6) and relaxation (2) states.
     Returns H with the shape of B."""
     rec = load(material) if isinstance(material, str) else material
+    check_range(rec, B, T)
     B2 = np.atleast_2d(np.asarray(B, float)); N, W = B2.shape
     T = np.broadcast_to(np.asarray(T, float), (N,))
     s0 = np.zeros((N, 8)) if states is None else np.broadcast_to(np.asarray(states, float), (N, 8)).copy()

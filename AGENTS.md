@@ -23,6 +23,10 @@ Materials: 3C90, 3C92, 3C94, 3C95, 3E6, 3F4, 77, 78, FEC007, FEC014, N27, N30, N
   B = Φ/(N Ae) and H = N i / le.
 - Trained temperatures: 25, 50, 70 °C. All coefficients are at most linear in t = (T − 50)/25; outside
   25–70 °C this is extrapolation.
+- Training range: `simulate`, `predict` and `fb.Circuit(...).predict` emit an `fb.OutOfTrainingRangeWarning` if T
+  leaves 25–70 °C or if |B|, the per-sample slope |dB| or curvature |d2B| exceed the maxima of the material's training
+  data (`validity.training_range` in its JSON; `fb.check_range` returns the violations). Large amplitudes at high
+  frequency hit the slope limit first.
 - Measurement vs. material: the parameters tau1, tau2 (correction u = B + tau1 B′ + tau2 B″) and eta (first-order lag
   of H) describe the MC2 test bench, not the material. `simulate(..., material_only=True)` and the SPICE subcircuits
   exclude them; `predict()` includes them because it reproduces the challenge's measured H.

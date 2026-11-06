@@ -33,3 +33,11 @@ def test_zero_schedule_is_backbone():
     scale = H.pow(2).mean().sqrt()
     assert ((a - b).abs().max() / scale).item() < 1e-5
     assert ((c - b).abs().max() / scale).item() > 1e-3                 # the trained schedule does change the output
+
+
+@pytest.mark.parametrize("circuit", ["classical", "mlp16"])
+def test_circuit_range_warning(circuit):
+    """fb.Circuit warns outside the training range of the material, naming the circuit."""
+    c = fb.Circuit(circuit)
+    with pytest.warns(fb.OutOfTrainingRangeWarning, match="classical circuit" if circuit == "classical" else "MLP16"):
+        c.predict("3C90", torch.zeros(64), torch.zeros(16), 100.0)

@@ -13,6 +13,7 @@ import torch
 from mc2lib import ROOT
 from compact_m import DEV
 from loader import load
+from .model import check_range, load as load_params
 
 CKPT = {"classical": lambda s: ("nere" if s == 0 else f"ne_s{s}", "final_e1"),
         "mlp16": lambda s: ("hyAB16j_long" if s == 0 else f"hyAB16j_s{s}", "final_e1+hyperAB16j"),
@@ -32,14 +33,18 @@ class Circuit:
         self.model, variants, self.materials = load(name)
         self.model.eval()
         self.e = variants.index(variant)
+        self.label = "classical circuit" if circuit == "classical" else f"{circuit.upper()}-scheduled circuit"
 
     @torch.no_grad()
     def predict(self, material, B, H_warmup, T, k=None):
         """H (A/m) for windows of B (T) at 16 MHz, given the measured H over the first k samples (warm-up).
         B: (W,) or (N, W); H_warmup: (k,) / (N, k) or full-length (only the first k samples are used); T: degC, scalar or
         (N,). NumPy arrays or tensors; returns H with the type and shape of B: the warm-up samples as measured, then the
-        prediction (the field as measured by the MC2 test bench)."""
+        prediction (the field as measured by the MC2 test bench). Warns (OutOfTrainingRangeWarning) outside the
+        training range of the material."""
         tensor = torch.is_tensor(B)
+        npy = lambda x: x.detach().cpu().numpy() if torch.is_tensor(x) else x
+        check_range(load_params(material), npy(B), npy(T), self.label, stacklevel=4)   # 4: past torch.no_grad
         f = lambda x: torch.as_tensor(x, dtype=torch.float32, device=DEV)
         B2, Hw = torch.atleast_2d(f(B)), torch.atleast_2d(f(H_warmup))
         N, W = B2.shape

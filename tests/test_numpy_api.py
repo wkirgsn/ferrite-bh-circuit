@@ -77,3 +77,17 @@ def test_states_and_zero_input():
     B, T = excitation(N=1)
     s = np.zeros(8)
     assert np.array_equal(fb.simulate("N87", B[0], 25.0, states=s), fb.simulate("N87", B[0], 25.0))
+
+
+def test_range_warning():
+    """predict and simulate warn outside the training range (temperature, |B|, slope) and not on measured data."""
+    with pytest.warns(fb.OutOfTrainingRangeWarning, match="T from"):
+        fb.simulate("3C90", np.zeros(16), 100.0)
+    with pytest.warns(fb.OutOfTrainingRangeWarning, match=r"\|B\| up to"):
+        fb.predict("3C90", np.full(64, 1.0), np.zeros(16), 25.0)
+    t = np.arange(320) / 16e6
+    b = 0.4 * (1.0 - 4.0 * np.abs((t * 100e3 + 0.25) % 1.0 - 0.5))      # 0.4 T triangle at 100 kHz
+    with pytest.warns(fb.OutOfTrainingRangeWarning, match="dB/dt"):
+        fb.simulate("3C90", b, 25.0)
+    b = 0.1 * np.sin(2 * np.pi * 100e3 * t)                               # 0.1 T sine at 100 kHz: within range
+    assert fb.check_range(fb.load("3C90"), b, 25.0) == []

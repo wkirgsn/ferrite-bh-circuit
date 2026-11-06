@@ -129,6 +129,7 @@ fb.coefficients("N87", T=25)                  # a1, Bs, play widths and weights,
 ```
 
 Both `simulate` and `predict` take one window, `B` of shape `(W,)`, or a batch of windows, `B` of shape `(N, W)` with `H_warmup` of shape `(N, k)` and the temperature as a scalar or one per window, `T` of shape `(N,)`; `H` has the shape of `B`.
+Outside the training range of a material (temperature, $|B|$, slope and curvature of $B$), both, as well as `fb.Circuit(...).predict`, emit an `fb.OutOfTrainingRangeWarning`: the prediction is then an extrapolation.
 For example, the MC2 test windows of a material at once:
 
 ```python
@@ -143,7 +144,7 @@ python -m ferrite_bh simulate N87 --T 25 --B b.csv --out h.csv       # open loop
 python -m ferrite_bh predict N87 --T 25 --B b.csv --H h_warmup.csv   # MC2 setting
 ```
 
-The fitted parameters are also available as plain JSON, `ferrite_bh/params/<material>.json`: the 32 parameters by name, with units and descriptions, plus the warm-up estimator, validity range and test errors.
+The fitted parameters are also available as plain JSON, `ferrite_bh/params/<material>.json`: the 32 parameters by name, with units and descriptions, plus the warm-up estimator, validity and training range, and test errors.
 The NumPy implementation reproduces the PyTorch model to 1e-4 % (`results/check_numpy.txt`).
 
 ### SPICE

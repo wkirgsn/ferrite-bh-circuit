@@ -5,6 +5,7 @@ Usage: python export_params.py [ckpt:variant=nere:final_e1]   -> ferrite_bh/para
 import sys, json, re, numpy as np, torch
 from mc2lib import ROOT, windows
 from compact_m import CompactM
+from export_hub import validity as training_range
 
 spec = sys.argv[1] if len(sys.argv) > 1 else "nere:final_e1"
 ckn, var = spec.split(":")
@@ -63,8 +64,10 @@ for i, mt in enumerate(ck["mats"]):
         units=dict(B="T", H="A/m", T="degC", time="samples of 62.5 ns"),
         validity=dict(temperatures_degC=sorted(float(x) for x in np.unique(np.round(w["T"]))),
                       B_peak_max_T=round(float(np.abs(w["B"]).max()), 3),
+                      training_range=training_range(mt),
                       note="trained on the MC2 measurements of this material (B_peak_max_T: largest |B| in its test windows); "
-                           "temperature dependence at most linear in t = (T - 50)/25"),
+                           "temperature dependence at most linear in t = (T - 50)/25; training_range: T and the maxima of |B| and of the "
+                           "per-sample |dB| and |d2B| over the training sequences, checked by the range warning"),
         test_errors_percent=test.get(mt, {}),
         parameters={n: dict(value=float(val[n]), description=DESC[n][0], unit=DESC[n][1]) for n in DESC},
         estimator=dict(description="warm-up estimator (not counted as model parameters): prior initial play states "
