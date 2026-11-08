@@ -7,7 +7,7 @@ from mc2lib import ROOT, windows, load_material
 
 INK, MUTED, SHADE = "#0b0b0b", "#8a8984", "#efeeea"
 C = ["#2a78d6", "#eb6834", "#1baf7a"]                  # categorical slots 1-3 (validated all-pairs)
-plt.rcParams.update({"font.size": 7, "font.family": "serif", "axes.linewidth": 0.5, "xtick.major.width": 0.5,
+plt.rcParams.update({"font.size": 7, "font.family": "serif", "mathtext.fontset": "dejavuserif", "axes.linewidth": 0.5, "xtick.major.width": 0.5,
                      "ytick.major.width": 0.5, "axes.spines.top": False, "axes.spines.right": False,
                      "xtick.color": MUTED, "ytick.color": MUTED, "xtick.labelcolor": INK, "ytick.labelcolor": INK,
                      "xtick.major.size": 2, "ytick.major.size": 2})
@@ -46,18 +46,18 @@ t = np.arange(1000) / 16
 axb, axh = fig.add_subplot(gs[0, :]), fig.add_subplot(gs[1, :])
 for ax in (axb, axh):
     ax.axvspan(0, k / 16, color=SHADE, lw=0); ax.set_xlim(0, t[-1])
-axb.plot(t, 1e3 * w["B"][q], color=C[0], lw=0.7); axb.set_ylabel("B in mT"); axb.tick_params(labelbottom=False)
+axb.plot(t, 1e3 * w["B"][q], color=C[0], lw=0.7); axb.set_ylabel("$B$ in mT"); axb.tick_params(labelbottom=False)
 axh.plot(t[:k], w["H"][q, :k], color=C[1], lw=0.7)
 axh.plot(t[k:], w["H"][q, k:], color=C[1], lw=0.7, ls=(0, (2, 1.5)))
-axh.set_ylabel("H in A/m"); axh.set_xlabel("time in µs")
+axh.set_ylabel("$H$ in A/m"); axh.set_xlabel("time in µs")
 yl = axh.get_ylim(); ytop = yl[1] + 0.12 * (yl[1] - yl[0]); axh.set_ylim(yl[0], ytop)
-axh.text(k / 32, ytop, "warm-up: B, H, T known", ha="center", va="top", fontsize=6.5, color=INK)
-axh.text((k + 1000) / 32, ytop, "predict H from B, T", ha="center", va="top", fontsize=6.5, color=INK)
+axh.text(k / 32, ytop, "warm-up: $B$, $H$, $T$ known", ha="center", va="top", fontsize=6.5, color=INK)
+axh.text((k + 1000) / 32, ytop, "predict $H$ from $B$, $T$", ha="center", va="top", fontsize=6.5, color=INK)
 axb.set_title(f"(a) MC2 task, 3C94, {w['T'][q]:.0f} °C", fontsize=7, loc="left", color=INK)
 
 def loop(ax, title):
     """Title and axis labels of a B-H loop panel."""
-    ax.set_title(title, fontsize=7, loc="left", color=INK); ax.set_xlabel("H in A/m"); ax.set_ylabel("B in mT")
+    ax.set_title(title, fontsize=7, loc="left", color=INK); ax.set_xlabel("$H$ in A/m"); ax.set_ylabel("$B$ in mT")
 
 # (b) deep saturation, 3C90 at 50 kHz and 70 °C
 B, H, T = peak(by_f("3C90", 50e3)); ax = fig.add_subplot(gs[2, 0]); ax.plot(H, 1e3 * B, color=C[0], lw=0.6)
